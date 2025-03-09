@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
         User user = new User(create.name(), create.email(), create.password());
         user = userRepository.save(user);
 
-        return new UserListDTO(user.getId(), user.getName(), user.getEmail(), user.getAccounts().size());
+        return new UserListDTO(user.getId(), user.getName(), user.getEmail());
 
     }
 
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         if (update.password() != null) user.setName(update.password());
 
         user = userRepository.save(user);
-        return new UserListDTO(user.getId(), user.getName(), user.getEmail(), user.getAccounts().size());
+        return new UserListDTO(user.getId(), user.getName(), user.getEmail());
     }
 
     @Override
@@ -51,14 +51,14 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow( () -> new IllegalArgumentException("Usuário não encontrado") );
 
-        return new UserListDTO(user.getId(), user.getName(), user.getEmail(), user.getAccounts().size());
+        return new UserListDTO(user.getId(), user.getName(), user.getEmail());
     }
 
     @Override
     public List<UserListDTO> findAllUsers() {
 
         return userRepository.findAll().stream()
-                .map(user -> new UserListDTO(user.getId(), user.getName(), user.getEmail(), user.getAccounts().size()))
+                .map(user -> new UserListDTO(user.getId(), user.getName(), user.getEmail()))
                 .collect(Collectors.toList());
     }
 
