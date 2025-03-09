@@ -1,7 +1,7 @@
 package ao.com.wundu.controller;
 
 import ao.com.wundu.dto.UserCreateDTO;
-import ao.com.wundu.dto.UserListDTO;
+import ao.com.wundu.dto.UserResponseDTO;
 import ao.com.wundu.dto.UserUpdateDTO;
 import ao.com.wundu.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +34,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "User created successfully",
                 content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = UserListDTO.class))
+                schema = @Schema(implementation = UserResponseDTO.class))
             ),
             @ApiResponse(responseCode = "400", description = "Invalid input data",
                     content = @Content(mediaType = "application/json",
@@ -44,11 +44,11 @@ public class UserController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<UserListDTO> createUser(
+    public ResponseEntity<UserResponseDTO> createUser(
             @Parameter(description = "User data for creation", required = true)
             @Valid @RequestBody UserCreateDTO create) {
 
-        UserListDTO user = userService.createUser(create);
+        UserResponseDTO user = userService.createUser(create);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(user);
@@ -59,7 +59,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "User updated successfully",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserListDTO.class))
+                            schema = @Schema(implementation = UserResponseDTO.class))
             ),
             @ApiResponse(responseCode = "400", description = "Invalid input data",
                     content = @Content(mediaType = "application/json",
@@ -74,14 +74,14 @@ public class UserController {
                             schema = @Schema(implementation = ErrorResponse.class))
             )
     })
-    public ResponseEntity<UserListDTO> updateUser(
+    public ResponseEntity<UserResponseDTO> updateUser(
             @Parameter(description = "User ID", required = true, example = "b28906bf-561b-4b61-9bd4-fd7c23eec23f")
             @PathVariable String id,
 
             @Parameter(description = "Updated user data", required = true)
             @Valid @RequestBody UserUpdateDTO update) {
 
-        UserListDTO user = userService.updateUser(id, update);
+        UserResponseDTO user = userService.updateUser(id, update);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(user);
@@ -92,7 +92,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "User retriever successfully",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserListDTO.class))
+                            schema = @Schema(implementation = UserResponseDTO.class))
             ),
             @ApiResponse(responseCode = "400", description = "Invalid input data",
                     content = @Content(mediaType = "application/json",
@@ -107,11 +107,11 @@ public class UserController {
                             schema = @Schema(implementation = ErrorResponse.class))
             )
     })
-    public ResponseEntity<UserListDTO> findUserById(
+    public ResponseEntity<UserResponseDTO> findUserById(
             @Parameter(description = "User ID", required = true, example = "b28906bf-561b-4b61-9bd4-fd7c23eec23f")
             @PathVariable String id) {
 
-        UserListDTO user = userService.findUserById(id);
+        UserResponseDTO user = userService.findUserById(id);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(user);
@@ -122,14 +122,14 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Users retriever successfully",
                     content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = UserListDTO.class)))
+                            array = @ArraySchema(schema = @Schema(implementation = UserResponseDTO.class)))
             ),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class))
             )
     })
-    public ResponseEntity<List<UserListDTO>> findAllUsers() {
+    public ResponseEntity<List<UserResponseDTO>> findAllUsers() {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userService.findAllUsers());
@@ -141,7 +141,7 @@ public class UserController {
             @ApiResponse(responseCode = "204", description = "User deleted successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid user ID",
                     content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = UserListDTO.class)))
+                            array = @ArraySchema(schema = @Schema(implementation = UserResponseDTO.class)))
             ),
             @ApiResponse(responseCode = "404", description = "User not found",
                     content = @Content(mediaType = "application/json",
