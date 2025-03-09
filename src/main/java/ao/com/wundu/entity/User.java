@@ -23,8 +23,6 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Account> accounts = new ArrayList<>();
 
     public User() {
     }
@@ -67,11 +65,4 @@ public class User {
         this.password = password;
     }
 
-    public List<Account> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
-    }
 }
