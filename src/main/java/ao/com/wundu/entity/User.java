@@ -23,6 +23,8 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CreditCard> creditCards = new ArrayList<>();
 
     public User() {
     }
@@ -65,4 +67,11 @@ public class User {
         this.password = password;
     }
 
+    public List<CreditCard> getCards() {
+        return creditCards;
+    }
+
+    public void setCards(List<CreditCard> creditCards) {
+        this.creditCards = creditCards;
+    }
 }
