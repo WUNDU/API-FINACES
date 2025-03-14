@@ -1,11 +1,26 @@
 package ao.com.wundu.entity;
 
+import jakarta.persistence.*;
 import java.util.UUID;
 
+@Entity
+@Table(name = "authentications")
 public class Authentication {
-    private final String userId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String userId;
+
+    @Column
     private String token;
-    private final String authenticationMethod;
+
+    @Column(nullable = false)
+    private String authenticationMethod;
+
+    public Authentication() {}
 
     public Authentication(String userId, String authenticationMethod) {
         if (userId == null || userId.isBlank()) throw new IllegalArgumentException("ID do usuário é obrigatório");
@@ -15,15 +30,16 @@ public class Authentication {
         this.authenticationMethod = authenticationMethod;
     }
 
-    public boolean validarLogin(String providedToken) {
-        return token != null && token.equals(providedToken);
+    public boolean validateLogin(String providedMethod) {
+        return authenticationMethod.equals(providedMethod);
     }
 
-    public void gerarToken() {
+    public String generateToken() {
         this.token = UUID.randomUUID().toString();
+        return this.token;
     }
 
-    public void encerrarSessao() {
+    public void endSession() {
         this.token = null;
     }
 

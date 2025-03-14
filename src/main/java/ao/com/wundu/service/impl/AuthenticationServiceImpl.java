@@ -1,3 +1,4 @@
+
 package ao.com.wundu.service.impl;
 
 import ao.com.wundu.dto.AuthenticationRequestDTO;
@@ -16,17 +17,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponseDTO login(AuthenticationRequestDTO request) {
+    public AuthenticationResponseDTO validateLogin(AuthenticationRequestDTO request) {
         Authentication auth = repository.findByUserId(request.userId())
                 .orElse(new Authentication(request.userId(), request.authenticationMethod()));
-        if (!auth.validateLogin(request.authenticationMethod())) throw new IllegalArgumentException("Método de autenticação inválido");
+
+        if (!auth.validateLogin(request.authenticationMethod())) {
+            throw new IllegalArgumentException("Método de autenticação inválido");
+        }
+
         String token = auth.generateToken();
         repository.save(auth);
         return new AuthenticationResponseDTO(token);
     }
 
     @Override
-    public void logout(String userId) {
+    public void endSession(String userId) {
         Authentication auth = repository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
         auth.endSession();
