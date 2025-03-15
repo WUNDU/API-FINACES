@@ -1,0 +1,93 @@
+package ao.com.wundu.service.impl;
+
+import ao.com.wundu.config.JwtUtil;
+import ao.com.wundu.dto.LoginRequestDTO;
+import ao.com.wundu.dto.LoginResponseDTO;
+import ao.com.wundu.dto.PasswordResetConfirmDTO;
+import ao.com.wundu.dto.PasswordResetRequestDTO;
+import ao.com.wundu.entity.User;
+import ao.com.wundu.messaging.EmailService;
+import ao.com.wundu.messaging.SmsService;
+import ao.com.wundu.repository.UserRepository;
+import ao.com.wundu.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.UUID;
+
+@Service
+public class AuthServiceImpl implements AuthService {
+
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private SmsService smsService;
+
+    @Override
+    public LoginResponseDTO authenticate(LoginRequestDTO dto) {
+
+        User user = userRepository.findByEmail(dto.email())
+                .orElseThrow( () -> new RuntimeException("E-mail ou senha incorreta") );
+
+        if (user.isLocked()) {
+            throw new RuntimeException("Usuário bloqueado por excesso de tentativas");
+        }
+
+        if (!passwordEncoder.matches(dto.password(), user.getPassword())) {
+            user.setLoginAttempts(user.getLoginAttempts() + 1);
+            if ( user.getLoginAttempts() >= 5 ) {
+                user.setLocked(true);
+            }
+            userRepository.save(user); // Salva as tentativas incorretas
+            throw new RuntimeException("E-mail ou senha incorreta");
+        }
+        user.setLoginAttempts(0);
+        userRepository.save(user);
+
+        String token = jwtUtil.gereratToken(user.getEmail());
+        String refreshToken = jwtUtil.generateRefreshToken(user.getEmail());
+
+        return new LoginResponseDTO(token, refreshToken);
+    }
+
+    @Override
+    public void requestPassWordReset(PasswordResetRequestDTO dto) {
+
+        User user = userRepository.findByEmail(dto.email())
+                .orElseThrow( () -> new RuntimeException("Usuário não encontrado") );
+
+        String token = UUID.randomUUID().toString();
+        // Simula armazenamento temporário do token (em produção, usar Redis ou tabela)
+        String message = "Seu código de recuperação é: " + token;
+
+        if ( "email".equals(dto.email()) ) {
+            emailService.sendEmail(dto.email(), "Recuepração de senha",  message);
+        } else if ( "sms".equals(dto.method()) ) {
+            smsService.sendSms("+244" + user.getEmail(), message);
+        } else {
+            throw new RuntimeException("Método de recuperação inválido");
+        }
+    }
+
+    @Override
+    public void confirmPassWordReset(PasswordResetConfirmDTO dto) {
+        // Simula validação do token (em produção, verificar em Redis ou tabela)
+
+        User user = userRepository.findAll().stream()
+                .filter( u -> dto.token().equals("simulated-token-" + u.getEmail()) )
+                .findFirst()
+                .orElseThrow( () -> new RuntimeException("Token inválido") );
+
+        user.setPassword(passwordEncoder.encode(dto.newPassWord()));
+        user.setLoginAttempts(0);
+        user.setLocked(false);
+        userRepository.save(user);
+    }
+}

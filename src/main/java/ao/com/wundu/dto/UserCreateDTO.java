@@ -15,6 +15,8 @@ public record UserCreateDTO(
 
         @NotBlank(message = "Password não pode estar em branco")
         @Size(min = 8, message = "Password deve ter no mínimo 8 caracteres")
-        String password
+        String password,
+
+        String notificationPreference
 ) {
 }

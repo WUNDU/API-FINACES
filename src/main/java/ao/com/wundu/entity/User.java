@@ -23,6 +23,15 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(name = "notification_preference")
+    private String notificationPreference;
+
+    @Column(name = "login_attempts")
+    private int loginAttempts;
+
+    @Column(name = "locked")
+    private boolean locked;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CreditCard> creditCards = new ArrayList<>();
 
@@ -34,6 +43,17 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    public User(String name, String email, String password, String notificationPreference) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.notificationPreference = notificationPreference;
+        this.loginAttempts = 0;
+        this.locked = false;
+    }
+
+
     public String getId() {
         return id;
     }
@@ -64,6 +84,30 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getNotificationPreference() {
+        return notificationPreference;
+    }
+
+    public void setNotificationPreference(String notificationPreference) {
+        this.notificationPreference = notificationPreference;
+    }
+
+    public int getLoginAttempts() {
+        return loginAttempts;
+    }
+
+    public void setLoginAttempts(int loginAttempts) {
+        this.loginAttempts = loginAttempts;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
     public List<CreditCard> getCreditCards() {
