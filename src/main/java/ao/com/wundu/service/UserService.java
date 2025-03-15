@@ -11,6 +11,4 @@ public interface UserService {
     UserResponseDTO findUserById(String id);
     List<UserResponseDTO> findAllUsers();
     void deleteUser(String id);
-
-    CreditCardResponseDTO addCreditCard(String userId, CreditCardCreateDTO create);
 }
