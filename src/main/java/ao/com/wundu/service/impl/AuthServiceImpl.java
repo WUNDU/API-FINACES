@@ -67,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
         // Simula armazenamento temporário do token (em produção, usar Redis ou tabela)
         String message = "Seu código de recuperação é: " + token;
 
-        if ( "email".equals(dto.email()) ) {
+        if ( "email".equals(dto.method()) ) {
             emailService.sendEmail(dto.email(), "Recuepração de senha",  message);
         } else if ( "sms".equals(dto.method()) ) {
             smsService.sendSms("+244" + user.getEmail(), message);

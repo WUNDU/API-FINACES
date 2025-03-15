@@ -3,6 +3,7 @@ package ao.com.wundu.service.impl;
 import ao.com.wundu.dto.*;
 import ao.com.wundu.entity.CreditCard;
 import ao.com.wundu.entity.User;
+import ao.com.wundu.messaging.EmailService;
 import ao.com.wundu.repository.CreditCardRepository;
 import ao.com.wundu.repository.UserRepository;
 import ao.com.wundu.service.UserService;
@@ -22,6 +23,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EmailService emailService;
+
     @Override
     public UserResponseDTO createUser(UserCreateDTO create) {
 
@@ -31,6 +35,26 @@ public class UserServiceImpl implements UserService {
 
         User user = new User(create.name(), create.email(), passwordEncoder.encode(create.password()), create.notificationPreference());
         user = userRepository.save(user);
+
+        // Enviar e-mail de boas-vindas
+        String subject = "Bem-vindo ao nosso sistema!";
+        String message = "Olá " + user.getName() + ",\n\n"
+                + "Seu cadastro foi realizado com sucesso. Estamos felizes em tê-lo(a) conosco!\n\n"
+                + "Se precisar de algo, entre em contato.\n\n"
+                + "Atenciosamente,\nWUNDU FINACES";
+
+        emailService.sendEmail(user.getEmail(), subject, message);
+
+        // Enviar notificação para o admin
+        String adminEmail = "evandre297@email.com";
+        String subjectAdmin = "Novo usuário cadastrado!";
+        String messageAdmin = "Olá Admin,\n\n"
+                + "Um novo usuário acaba de se cadastrar no sistema.\n\n"
+                + "**Nome:** " + user.getName() + "\n"
+                + "**Email:** " + user.getEmail() + "\n\n"
+                + "Atenciosamente,\nEquipe do Sistema";
+
+        emailService.sendEmail(adminEmail, subjectAdmin, messageAdmin);
 
         return new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getNotificationPreference());
 
