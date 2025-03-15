@@ -1,9 +1,9 @@
 package ao.com.wundu.service.impl;
 
 import ao.com.wundu.dto.*;
-import ao.com.wundu.entity.CreditCard;
+//import ao.com.wundu.entity.CreditCard;
 import ao.com.wundu.entity.User;
-import ao.com.wundu.repository.CreditCardRepository;
+//import ao.com.wundu.repository.CreditCardRepository;
 import ao.com.wundu.repository.UserRepository;
 import ao.com.wundu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDTO createUser(UserCreateDTO create) {
 
-        if ( userRepository.findByEmail(create.email()).isPresent() ) {
+        if (userRepository.findByEmail(create.email()).isPresent()) {
             throw new IllegalArgumentException("Já existe um usuário com este email");
         }
 
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO updateUser(String id, UserUpdateDTO update) {
 
         User user = userRepository.findById(id)
-                .orElseThrow( () -> new IllegalArgumentException("Usuário não encontrado") );
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
 
         user.setName(update.name());
         user.setName(update.password());
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO findUserById(String id) {
 
         User user = userRepository.findById(id)
-                .orElseThrow( () -> new IllegalArgumentException("Usuário não encontrado") );
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
 
         return new UserResponseDTO(user.getId(), user.getName(), user.getEmail());
     }

@@ -1,7 +1,6 @@
 package ao.com.wundu.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import ao.com.wundu.entity.Notification;
 import lombok.Data;
 
 @Data

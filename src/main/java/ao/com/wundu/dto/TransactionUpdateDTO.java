@@ -1,3 +1,3 @@
 package ao.com.wundu.dto;
 
-public record TransactionUpdateDTO(Double amount, String description, String type) {}
+public record TransactionUpdateDTO(Double amount, String description, String type, String categoryId) {}

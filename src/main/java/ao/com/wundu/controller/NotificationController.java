@@ -31,4 +31,4 @@ public class NotificationController {
         notificationService.markAsRead(id);
         return ResponseEntity.noContent().build();
     }
-} 
+}
