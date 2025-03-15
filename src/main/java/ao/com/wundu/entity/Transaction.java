@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @Table(name = "TB_transactions")
 public class Transaction {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private Double amount;

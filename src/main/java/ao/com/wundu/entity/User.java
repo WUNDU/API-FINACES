@@ -34,7 +34,6 @@ public class User {
         this.email = email;
         this.password = password;
     }
-
     public String getId() {
         return id;
     }
@@ -67,11 +66,11 @@ public class User {
         this.password = password;
     }
 
-    public List<CreditCard> getCards() {
+    public List<CreditCard> getCreditCards() {
         return creditCards;
     }
 
-    public void setCards(List<CreditCard> creditCards) {
+    public void setCreditCards(List<CreditCard> creditCards) {
         this.creditCards = creditCards;
     }
 }
