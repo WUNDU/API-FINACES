@@ -7,6 +7,7 @@ import ao.com.wundu.entity.User;
 import ao.com.wundu.repository.CreditCardRepository;
 import ao.com.wundu.repository.UserRepository;
 import ao.com.wundu.service.CreditCardService;
+import ao.com.wundu.service.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,9 @@ public class CreditCardServiceImpl implements CreditCardService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private SecurityManager securityManager;
+
     @Override
     public CreditCardResponseDTO addCreditCard(String userId, CreditCardCreateDTO create) {
 
@@ -32,12 +36,15 @@ public class CreditCardServiceImpl implements CreditCardService {
             throw new IllegalArgumentException("Limite de 5 cartões por usuário atingido");
         }
 
-        CreditCard card = new CreditCard();
-        card.setCardNumber(create.cardNumber());
-        card.setBankName(create.bankName());
-        card.setCreditLimit(create.creaditLimit());
-        card.setExpirationDate(create.expirationDate());
-        card.setUser(user);
+        String encryptedCardNumber = securityManager.encrypt(create.cardNumber());
+
+        CreditCard card = new CreditCard(encryptedCardNumber, create.bankName(), create.creaditLimit(), create.expirationDate(), user);
+//        CreditCard card = new CreditCard();
+//        card.setCardNumber(create.cardNumber());
+//        card.setBankName(create.bankName());
+//        card.setCreditLimit(create.creaditLimit());
+//        card.setExpirationDate(create.expirationDate());
+//        card.setUser(user);
 
         card = creditCardRepository.save(card);
 

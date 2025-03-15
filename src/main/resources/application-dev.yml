@@ -14,3 +14,30 @@ spring:
   h2:
     console:
       enabled: true  # Para acessar o console H2 em http://localhost:8089/h2-console
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "seu-email@gmail.com"
+    password: "sua-senha-app-specific"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+jwt:
+  secret: ThisIsAVeryLongAndSecureSecretKeyForJWTThatIsAtLeast64CharactersLong1234567890
+  expiration: 86400000  # 24 horas em milissegundos
+
+encryption:
+  key: "chave16bytes123456"  # Chave de 16 bytes para AES
+
+# Twilio (SMS) - Simulado por enquanto
+twilio:
+  account:
+    sid: "your-twilio-account-sid"
+  auth:
+    token: "your-twilio-auth-token"
+  phone:
+    number: "+224928878381"
