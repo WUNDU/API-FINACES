@@ -18,9 +18,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private CreditCardRepository creditCardRepository;
-
     @Override
     public UserResponseDTO createUser(UserCreateDTO create) {
 
@@ -73,30 +70,5 @@ public class UserServiceImpl implements UserService {
         }
 
         userRepository.deleteById(id);
-    }
-
-    @Override
-    public CreditCardResponseDTO addCreditCard(String userId, CreditCardCreateDTO create) {
-
-        User user = userRepository.findById(userId)
-                .orElseThrow( () -> new IllegalArgumentException("Usuário não encontrado") );
-
-        if ( creditCardRepository.findByUserId(userId).size() >= 3 ) {
-            throw new IllegalArgumentException("Limite de 5 cartões por usuário atingido");
-        }
-
-        CreditCard card = new CreditCard();
-        card.setCardNumber(create.cardNumber());
-        card.setBankName(create.bankName());
-        card.setCreditLimit(create.creaditLimit());
-        card.setExpirationDate(create.expirationDate());
-        card.setUser(user);
-
-        card = creditCardRepository.save(card);
-
-        return new CreditCardResponseDTO(
-                card.getId(), card.getCardNumber(), card.getBankName(), card.getCreditLimit(),
-                card.getExpirationDate(), userId);
-
     }
 }
