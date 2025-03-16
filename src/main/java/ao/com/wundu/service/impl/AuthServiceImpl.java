@@ -14,12 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+
+    private static final int MAX_LOGIN_ATTEMPTS = 3;
+    private static final int LOCK_DURATION_MINUTES = 15;
 
     @Autowired
     private UserRepository userRepository;
@@ -42,18 +46,24 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow( () -> new RuntimeException("E-mail ou senha incorreta") );
 
         if (user.isLocked()) {
-            throw new RuntimeException("Usuário bloqueado por excesso de tentativas");
+            throw new RuntimeException("Usuário bloqueado temporariamente. Tente novamente após " +
+                    user.getLockedUntil().toString());
         }
 
         if (!passwordEncoder.matches(dto.password(), user.getPassword())) {
             user.setLoginAttempts(user.getLoginAttempts() + 1);
-            if ( user.getLoginAttempts() >= 5 ) {
-                user.setLocked(true);
+            if (user.getLoginAttempts() >= MAX_LOGIN_ATTEMPTS) {
+                user.setLockedUntil(LocalDateTime.now().plusMinutes(LOCK_DURATION_MINUTES));
+                user.setLoginAttempts(0);
+                userRepository.save(user);
+                throw new RuntimeException("Usuário bloqueado por " + LOCK_DURATION_MINUTES +
+                        " minutos devido a múltiplas tentativas falhas");
             }
-            userRepository.save(user); // Salva as tentativas incorretas
+            userRepository.save(user);
             throw new RuntimeException("E-mail ou senha incorreta");
         }
         user.setLoginAttempts(0);
+        user.setLockedUntil(null);
         userRepository.save(user);
 
         String token = jwtUtil.gereratToken(user.getEmail());

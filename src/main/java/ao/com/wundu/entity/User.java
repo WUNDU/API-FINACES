@@ -2,6 +2,7 @@ package ao.com.wundu.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,11 @@ public class User {
     @Column(name = "locked")
     private boolean locked;
 
+    @Column(name = "phone")
     private String phone;
+
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CreditCard> creditCards = new ArrayList<>();
@@ -114,12 +119,16 @@ public class User {
         this.loginAttempts = loginAttempts;
     }
 
-    public boolean isLocked() {
-        return locked;
-    }
-
     public void setLocked(boolean locked) {
         this.locked = locked;
+    }
+
+    public LocalDateTime getLockedUntil() {
+        return lockedUntil;
+    }
+
+    public void setLockedUntil(LocalDateTime lockedUntil) {
+        this.lockedUntil = lockedUntil;
     }
 
     public List<CreditCard> getCreditCards() {
@@ -128,5 +137,9 @@ public class User {
 
     public void setCreditCards(List<CreditCard> creditCards) {
         this.creditCards = creditCards;
+    }
+
+    public boolean isLocked() {
+        return lockedUntil != null && LocalDateTime.now().isBefore(lockedUntil);
     }
 }
