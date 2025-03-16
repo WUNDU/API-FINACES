@@ -1,7 +1,6 @@
 package ao.com.wundu.entity;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "TB_category")
@@ -15,56 +14,48 @@ public class Category {
     private String nameCategory;
 
     @Column(nullable = false)
-    private String icon;
+    private String description;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<Transaction> transactions;
+    @OneToOne(mappedBy = "category", cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_transaction")
+    private Transaction transaction;
 
     public Category() {
     }
 
-    public Category(String nameCategory) {
+    public Category(String nameCategory, String description, Transaction transaction) {
         this.nameCategory = nameCategory;
+        this.description = description;
+        this.transaction = transaction;
     }
+
+    // Getters e Setters
 
     public String getIdCategory() {
         return idCategory;
     }
 
-    public String getIcon() {
-        return icon;
+    public String getDescription() {
+        return description;
     }
 
     public String getNameCategory() {
         return nameCategory;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setNameCategory(String nameCategory) {
         this.nameCategory = nameCategory;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public Transaction getTransaction() {
+        return transaction;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-
-    public void associateTransaction(Transaction transaction) {
-        if (transaction != null) {
-            transaction.setCategory(this);
-            this.transactions.add(transaction);
-        }
-    }
-
-    public double calculateTotalExpense() {
-        return transactions.stream()
-                .mapToDouble(Transaction::getAmount)
-                .sum();
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 }

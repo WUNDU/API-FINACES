@@ -1,4 +1,4 @@
 package ao.com.wundu.dto;
 
-public record CategoryUpdateDTO(String icon, String nameCategory) {
+public record CategoryUpdateDTO(String nameCategory, String description) {
 }

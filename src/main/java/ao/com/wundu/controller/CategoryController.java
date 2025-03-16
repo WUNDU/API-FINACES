@@ -1,8 +1,6 @@
 package ao.com.wundu.controller;
 
-import ao.com.wundu.dto.CategoryCreateDTO;
-import ao.com.wundu.dto.CategoryResponseDTO;
-import ao.com.wundu.dto.CategoryUpdateDTO;
+import ao.com.wundu.dto.*;
 import ao.com.wundu.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,15 +16,16 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @PostMapping
-    public ResponseEntity<CategoryResponseDTO> createCategory(@RequestBody CategoryCreateDTO create) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCategory(create));
+    @PostMapping("/{transactionId}")
+    public ResponseEntity<CategoryResponseDTO> createCategory(@PathVariable String transactionId,
+            @RequestBody CategoryCreateDTO create) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCategory(transactionId, create));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable String id, @PathVariable String icon,
+    public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable String id,
             @RequestBody CategoryUpdateDTO update) {
-        return ResponseEntity.ok(categoryService.updateCategory(id, icon, update));
+        return ResponseEntity.ok(categoryService.updateCategory(id, update));
     }
 
     @GetMapping("/{id}")

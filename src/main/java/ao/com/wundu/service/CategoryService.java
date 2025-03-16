@@ -5,9 +5,9 @@ import ao.com.wundu.dto.*;
 import java.util.List;
 
 public interface CategoryService {
-    CategoryResponseDTO createCategory(CategoryCreateDTO create);
+    CategoryResponseDTO createCategory(String transactionId, CategoryCreateDTO create);
 
-    CategoryResponseDTO updateCategory(String id, String icon, CategoryUpdateDTO update);
+    CategoryResponseDTO updateCategory(String id, CategoryUpdateDTO update);
 
     CategoryResponseDTO findCategoryById(String id);
 
