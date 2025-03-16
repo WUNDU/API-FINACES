@@ -8,7 +8,7 @@ public record PasswordResetConfirmDTO(
         String token,
 
         @NotBlank(message = "Nova senha é obrigatório")
-        String newPassWord
+        String newPassword
 
 ) {
 }

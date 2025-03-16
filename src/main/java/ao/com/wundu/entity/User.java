@@ -32,22 +32,26 @@ public class User {
     @Column(name = "locked")
     private boolean locked;
 
+    private String phone;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CreditCard> creditCards = new ArrayList<>();
 
     public User() {
     }
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, String phone) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.phone = phone;
     }
 
-    public User(String name, String email, String password, String notificationPreference) {
+    public User(String name, String email, String password,  String phone, String notificationPreference) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.phone = phone;
         this.notificationPreference = notificationPreference;
         this.loginAttempts = 0;
         this.locked = false;
@@ -84,6 +88,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getNotificationPreference() {

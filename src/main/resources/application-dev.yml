@@ -34,10 +34,10 @@ encryption:
   key: "chave16bytes123456"  # Chave de 16 bytes para AES
 
 # Twilio (SMS) - Simulado por enquanto
-twilio:
-  account:
-    sid: "your-twilio-account-sid"
-  auth:
-    token: "your-twilio-auth-token"
-  phone:
-    number: "+224928878381"
+#twilio:
+#  account:
+#    sid: "your-twilio-account-sid"
+#  auth:
+#    token: "your-twilio-auth-token"
+#  phone:
+#    number: "+224928878381"

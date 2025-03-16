@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -29,6 +31,9 @@ public class AuthServiceImpl implements AuthService {
     private EmailService emailService;
     @Autowired
     private SmsService smsService;
+
+    // Mapa temporário para armazenar tokens de recuperação (em produção, usar Redis)
+    private final Map<String, String> resetTokens = new HashMap<>();
 
     @Override
     public LoginResponseDTO authenticate(LoginRequestDTO dto) {
@@ -64,13 +69,14 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow( () -> new RuntimeException("Usuário não encontrado") );
 
         String token = UUID.randomUUID().toString();
+        resetTokens.put(token, dto.email()); // Armazena o token associado ao e-mail
         // Simula armazenamento temporário do token (em produção, usar Redis ou tabela)
         String message = "Seu código de recuperação é: " + token;
 
         if ( "email".equals(dto.method()) ) {
             emailService.sendEmail(dto.email(), "Recuepração de senha",  message);
         } else if ( "sms".equals(dto.method()) ) {
-            smsService.sendSms("+244" + user.getEmail(), message);
+            smsService.sendSms("+244" + user.getPhone(), message);
         } else {
             throw new RuntimeException("Método de recuperação inválido");
         }
@@ -80,14 +86,16 @@ public class AuthServiceImpl implements AuthService {
     public void confirmPassWordReset(PasswordResetConfirmDTO dto) {
         // Simula validação do token (em produção, verificar em Redis ou tabela)
 
-        User user = userRepository.findAll().stream()
-                .filter( u -> dto.token().equals("simulated-token-" + u.getEmail()) )
-                .findFirst()
-                .orElseThrow( () -> new RuntimeException("Token inválido") );
-
-        user.setPassword(passwordEncoder.encode(dto.newPassWord()));
+        String email = resetTokens.get(dto.token());
+        if (email == null) {
+            throw new RuntimeException("Token inválido");
+        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        user.setPassword(passwordEncoder.encode(dto.newPassword()));
         user.setLoginAttempts(0);
         user.setLocked(false);
         userRepository.save(user);
+        resetTokens.remove(dto.token()); // Remove o token após uso
     }
 }
