@@ -29,7 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
         Transaction transaction = new Transaction(create.amount(), create.description(), create.type(), creditCard);
         transaction = transactionRepository.save(transaction);
-        // creditCard.getTransactions().add(transaction);
+        // creditCard.getTransactions().add(transaction); Ou deixa assim
         creditCardRepository.save(creditCard);
         return new TransactionResponseDTO(transaction.getId(), transaction.getAmount(), transaction.getDescription(),
                 transaction.getType(), creditCardId, transaction.getDateTime().toString());
