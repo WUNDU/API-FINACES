@@ -8,10 +8,7 @@ import java.time.LocalDate;
 public record CreditCardCreateDTO(
 
         @NotBlank(message = "Número do cartão é obrigatório")
-        @Pattern(
-                regexp = "\\*\\*\\*\\*-\\*\\*\\*\\*-\\*\\*\\*\\*-\\d{4}",
-                message = "Formato do cartão deve ser ****-****-****-1234"
-        )
+        @Pattern(regexp = "\\d{16}", message = "Número do cartão deve ter 16 dígitos")
         String cardNumber,
 
         @NotBlank(message = "Nome do banco é obrigatório")
@@ -19,7 +16,7 @@ public record CreditCardCreateDTO(
 
         @NotNull(message = "Limite de crédito é obrigatório")
         @DecimalMin(value = "0.01", message = "Limite de crédito deve ser maior que zero")
-        BigDecimal creaditLimit,
+        BigDecimal creditLimit,
 
         @NotNull(message = "Data de expiração é obrigatória")
         @Future(message = "Data de experiração deve ser futura")

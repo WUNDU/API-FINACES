@@ -39,7 +39,7 @@ public class CreditCardServiceImpl implements CreditCardService {
 
         String encryptedCardNumber = securityManager.encrypt(create.cardNumber());
 
-        CreditCard card = new CreditCard(encryptedCardNumber, create.bankName(), create.creaditLimit(), create.expirationDate(), user);
+        CreditCard card = new CreditCard(encryptedCardNumber, create.bankName(), create.creditLimit(), create.expirationDate(), user);
 //        CreditCard card = new CreditCard();
 //        card.setCardNumber(create.cardNumber());
 //        card.setBankName(create.bankName());
