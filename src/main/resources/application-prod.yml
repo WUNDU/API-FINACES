@@ -1,0 +1,35 @@
+server:
+  port: ${SERVER_PORT}  # Ou outra porta que você quiser
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver  # Exemplo com PostgreSQL
+  jpa:
+    hibernate:
+      ddl-auto: none  # Em prod, usaremos migrações
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000  # 24 horas
+
+encryption:
+  key: ${ENCRYPTION_KEY}
+
+spring.mail:
+  host: ${MAIL_HOST}
+  port: ${MAIL_PORT}
+  username: ${MAIL_USERNAME}
+  password: ${MAIL_PASSWORD}
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true

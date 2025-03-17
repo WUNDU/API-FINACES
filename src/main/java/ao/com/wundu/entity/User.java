@@ -36,6 +36,7 @@ public class User {
     private boolean locked;
 
     @Column(name = "phone")
+    // TODO: O pHone deve ser unico
     private String phone;
 
     @Column(name = "locked_until")
