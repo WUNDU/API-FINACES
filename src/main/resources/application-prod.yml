@@ -6,7 +6,6 @@ spring:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver  # Exemplo com PostgreSQL
   jpa:
     hibernate:
       ddl-auto: none  # Em prod, usaremos migrações
