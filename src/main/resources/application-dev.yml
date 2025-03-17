@@ -1,43 +1,36 @@
 server:
-  port: 8089  # Ou outra porta que você quiser
+  port: ${SERVER_PORT}  # Porta padrão 8089 para dev
 
 spring:
   datasource:
-    url: jdbc:h2:mem:financeapp
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
+    url: ${DB_URL:jdbc:h2:mem:financeapp}
+    driverClassName: ${DB_DRIVER}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: ${JPA_DIALECT:org.hibernate.dialect.H2Dialect}
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${HIBERNATE_DDL:update}
   h2:
     console:
-      enabled: true  # Para acessar o console H2 em http://localhost:8089/h2-console
+      enabled: ${H2_CONSOLE_ENABLED:true}  # Console H2 em /h2-console
+      path: /h2-console
 
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: evandre297@gmail.com
-    password: e i o r a w c w k d c x v v d k
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:evandre297@gmail.com}
+    password: ${MAIL_PASSWORD:eiorawckdcxvvdvk}  # Use senha de app do Gmail
     properties:
       mail:
         smtp:
-          auth: true
+          auth: ${MAIL_SMTP_AUTH:true}
           starttls:
-            enable: true
+            enable: ${MAIL_STARTTLS_ENABLE:true}
+
 jwt:
-  secret: ThisIsAVeryLongAndSecureSecretKeyForJWTThatIsAtLeast64CharactersLong1234567890
-  expiration: 86400000  # 24 horas em milissegundos
+  secret: ${JWT_SECRET:ThisIsAVeryLongAndSecureSecretKeyForJWTThatIsAtLeast64CharactersLong1234567890}
+  expiration: ${JWT_EXPIRATION:86400000}
 
 encryption:
-  key: chave16bytes1234  # Chave de 16 bytes para AES
-
-# Twilio (SMS) - Simulado por enquanto
-#twilio:
-#  account:
-#    sid: "your-twilio-account-sid"
-#  auth:
-#    token: "your-twilio-auth-token"
-#  phone:
-#    number: "+224928878381"
+  key: ${ENCRYPTION_KEY:chave16bytes1234}
