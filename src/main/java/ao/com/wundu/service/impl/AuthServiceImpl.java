@@ -1,10 +1,7 @@
 package ao.com.wundu.service.impl;
 
 import ao.com.wundu.config.JwtUtil;
-import ao.com.wundu.dto.LoginRequestDTO;
-import ao.com.wundu.dto.LoginResponseDTO;
-import ao.com.wundu.dto.PasswordResetConfirmDTO;
-import ao.com.wundu.dto.PasswordResetRequestDTO;
+import ao.com.wundu.dto.*;
 import ao.com.wundu.entity.User;
 import ao.com.wundu.messaging.EmailService;
 import ao.com.wundu.messaging.SmsService;
@@ -69,7 +66,9 @@ public class AuthServiceImpl implements AuthService {
         String token = jwtUtil.gereratToken(user.getEmail());
         String refreshToken = jwtUtil.generateRefreshToken(user.getEmail());
 
-        return new LoginResponseDTO(token, refreshToken);
+        LoginResponseUserDTO userDTO = new LoginResponseUserDTO(user.getId(), user.getName(), user.getEmail());
+
+        return new LoginResponseDTO(token, refreshToken, userDTO);
     }
 
     @Override
