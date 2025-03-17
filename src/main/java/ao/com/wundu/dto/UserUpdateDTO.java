@@ -1,5 +1,6 @@
 package ao.com.wundu.dto;
 
+import ao.com.wundu.enums.NotificationPreference;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -18,6 +19,10 @@ public record UserUpdateDTO(
 //        @Size(min = 8, message = "Password deve ter no mínimo 8 caracteres")
 //        String password,
 
+        @NotBlank(message = "Preferência de notificação é obrigatória")
         String notificationPreference
 ) {
+        public NotificationPreference toNotificationPreference() {
+                return NotificationPreference.fromValue(notificationPreference);
+        }
 }

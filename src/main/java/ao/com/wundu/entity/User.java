@@ -1,5 +1,6 @@
 package ao.com.wundu.entity;
 
+import ao.com.wundu.enums.NotificationPreference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -24,8 +25,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "notification_preference")
-    private String notificationPreference;
+    private NotificationPreference notificationPreference;
 
     @Column(name = "login_attempts")
     private int loginAttempts;
@@ -52,7 +54,7 @@ public class User {
         this.phone = phone;
     }
 
-    public User(String name, String email, String password,  String phone, String notificationPreference) {
+    public User(String name, String email, String password,  String phone, NotificationPreference notificationPreference) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -103,11 +105,11 @@ public class User {
         this.phone = phone;
     }
 
-    public String getNotificationPreference() {
+    public NotificationPreference getNotificationPreference() {
         return notificationPreference;
     }
 
-    public void setNotificationPreference(String notificationPreference) {
+    public void setNotificationPreference(NotificationPreference notificationPreference) {
         this.notificationPreference = notificationPreference;
     }
 

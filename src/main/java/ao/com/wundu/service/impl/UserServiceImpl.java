@@ -33,7 +33,9 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Já existe um usuário com este email");
         }
 
-        User user = new User(create.name(), create.email(), passwordEncoder.encode(create.password()), create.phone(), create.notificationPreference());
+        // TODO: o número de telefone tem que ser unico.
+
+        User user = new User(create.name(), create.email(), passwordEncoder.encode(create.password()), create.phone(), create.toNotificationPreference());
         user = userRepository.save(user);
 
         // Enviar e-mail de boas-vindas
@@ -56,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
         emailService.sendEmail(adminEmail, subjectAdmin, messageAdmin);
 
-        return new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getPhone(), user.getNotificationPreference());
+        return new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getPhone(), user.getNotificationPreference().getValue());
 
     }
 
@@ -68,10 +70,10 @@ public class UserServiceImpl implements UserService {
 
         user.setName(update.name());
 //        user.setName(update.password());
-        user.setNotificationPreference(update.notificationPreference());
+        user.setNotificationPreference(update.toNotificationPreference());
 
         user = userRepository.save(user);
-        return new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getPhone(), user.getNotificationPreference());
+        return new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getPhone(), user.getNotificationPreference().getValue());
     }
 
     @Override
@@ -80,14 +82,14 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow( () -> new IllegalArgumentException("Usuário não encontrado") );
 
-        return new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getPhone(), user.getNotificationPreference());
+        return new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getPhone(), user.getNotificationPreference().getValue());
     }
 
     @Override
     public List<UserResponseDTO> findAllUsers() {
 
         return userRepository.findAll().stream()
-                .map(user -> new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getPhone(), user.getNotificationPreference()))
+                .map(user -> new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getPhone(), user.getNotificationPreference().getValue()))
                 .collect(Collectors.toList());
     }
 

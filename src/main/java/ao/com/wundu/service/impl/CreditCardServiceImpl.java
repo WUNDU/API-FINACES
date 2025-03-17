@@ -32,6 +32,7 @@ public class CreditCardServiceImpl implements CreditCardService {
         User user = userRepository.findById(userId)
                 .orElseThrow( () -> new IllegalArgumentException("Usuário não encontrado") );
 
+        // TODO: Altar o maximo de cartão do user para 3 na versão free
         if ( creditCardRepository.findByUserId(userId).size() >= 3 ) {
             throw new IllegalArgumentException("Limite de 5 cartões por usuário atingido");
         }

@@ -1,5 +1,6 @@
 package ao.com.wundu.dto;
 
+import ao.com.wundu.enums.NotificationPreference;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -25,6 +26,11 @@ public record UserCreateDTO(
         )
         String phone,
 
+        @NotBlank(message = "Preferência de notificação é obrigatória")
         String notificationPreference
 ) {
+
+        public NotificationPreference toNotificationPreference() {
+                return NotificationPreference.fromValue(notificationPreference);
+        }
 }
