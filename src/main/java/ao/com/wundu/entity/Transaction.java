@@ -16,37 +16,70 @@ public class Transaction {
 
     private String type;
 
-    private String accountId;
-    
     private LocalDateTime dateTime;
 
-    public Transaction() {}
+    @ManyToOne
+    @JoinColumn(name = "creditcard_id")
+    private CreditCard creditCard;
 
-    public Transaction(String id, Double amount, String description, String type, LocalDateTime dateTime, String accountId) {
+    @OneToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    public Transaction() {
+    }
+
+    public Transaction(String id, Double amount, String description, String type, LocalDateTime dateTime,
+                       CreditCard creditCard) {
         this.id = id;
         this.amount = amount;
         this.description = description;
         this.type = type;
+        this.creditCard = creditCard;
         this.dateTime = dateTime;
-        this.accountId = accountId;
     }
 
-    public Transaction(Double amount, String description, String type, String accountId) {
+    public Transaction(Double amount, String description, String type, CreditCard creditCard) {
         this.amount = amount;
         this.description = description;
         this.type = type;
-        this.accountId = accountId;
+        this.creditCard = creditCard;
         this.dateTime = LocalDateTime.now();
     }
 
-    public String getId() { return id; }
-    public Double getAmount() { return amount; }
-    public String getDescription() { return description; }
-    public String getType() { return type; }
-    public String getAccountId() { return accountId; }
-    public LocalDateTime getDateTime() { return dateTime; }
+    public String getId() {
+        return id;
+    }
 
-    public void setAmount(Double amount) { this.amount = amount; }
-    public void setDescription(String description) { this.description = description; }
-    public void setType(String type) { this.type = type; }
+    public Double getAmount() {
+        return amount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }

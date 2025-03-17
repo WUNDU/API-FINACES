@@ -4,9 +4,11 @@ import ao.com.wundu.dto.*;
 import java.util.List;
 
 public interface TransactionService {
-    TransactionResponseDTO createTransaction(TransactionCreateDTO create);
-    TransactionResponseDTO updateTransaction(String id, TransactionUpdateDTO update);
+    TransactionResponseDTO createTransaction(String creditCardId, TransactionCreateDTO create);
+
     TransactionResponseDTO findTransactionById(String id);
+
     List<TransactionResponseDTO> findAllTransactions();
+
     void deleteTransaction(String id);
 }
