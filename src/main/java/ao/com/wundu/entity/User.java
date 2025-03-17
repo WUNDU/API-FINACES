@@ -1,48 +1,53 @@
 package ao.com.wundu.entity;
 
 import ao.com.wundu.enums.NotificationPreference;
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "TB_users")
+//@Entity
+//@Table(name = "TB_users")
+@Document(collection = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id_user")
+//    @GeneratedValue(strategy = GenerationType.UUID)
+//    @Column(name = "id_user")
     private String id;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = false, name = "e-mail")
+//    @Column(unique = true, nullable = false, name = "e-mail")
     private String email;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "notification_preference")
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "notification_preference")
     private NotificationPreference notificationPreference;
 
-    @Column(name = "login_attempts")
+//    @Column(name = "login_attempts")
     private int loginAttempts;
 
-    @Column(name = "locked")
+//    @Column(name = "locked")
     private boolean locked;
 
-    @Column(name = "phone")
+//    @Column(name = "phone")
     // TODO: O pHone deve ser unico
     private String phone;
 
-    @Column(name = "locked_until")
+//    @Column(name = "locked_until")
     private LocalDateTime lockedUntil;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @DBRef
     private List<CreditCard> creditCards = new ArrayList<>();
 
     public User() {

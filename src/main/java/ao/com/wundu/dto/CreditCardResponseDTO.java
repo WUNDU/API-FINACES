@@ -1,7 +1,7 @@
 package ao.com.wundu.dto;
 
 import ao.com.wundu.entity.User;
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
