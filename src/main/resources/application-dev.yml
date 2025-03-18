@@ -41,7 +41,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: ${MONGODB_URI:mongodb://localhost:27017/financialdb}
+      uri: mongodb+srv://kelvinfabio2:lPq9vxc6BvOXwdEE@cluster0.btttn.mongodb.net/financialdb?retryWrites=true&w=majority
       database: financialdb
   mail:
     host: ${MAIL_HOST:smtp.gmail.com}
