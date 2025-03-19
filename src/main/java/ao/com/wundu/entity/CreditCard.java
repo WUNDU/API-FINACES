@@ -2,12 +2,16 @@ package ao.com.wundu.entity;
 
 
 //import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 //@Entity
 //@Table(name = "TB_cards")
@@ -20,6 +24,7 @@ public class CreditCard {
     private String id;
 
 //    @Column( name = "card_number", unique = true, nullable = false )
+    @Indexed(unique = true)
     private String cardNumber;
 
 //    @Column( name = "bank_name", nullable = false )
@@ -29,6 +34,7 @@ public class CreditCard {
     private BigDecimal creditLimit;
 
 //    @Column( name = "expitation_date", nullable = false )
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/yy")
     private LocalDate expirationDate;
 
 //    @ManyToOne
@@ -45,6 +51,12 @@ public class CreditCard {
         this.creditLimit = creditLimit;
         this.expirationDate = expirationDate;
         this.user = user;
+    }
+
+    @JsonGetter("expirationDate")
+    public String getFormattedExpirationDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
+        return expirationDate != null ? expirationDate.format(formatter) : null;
     }
 
     public String getId() {

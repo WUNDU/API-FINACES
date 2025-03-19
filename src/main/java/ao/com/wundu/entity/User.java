@@ -3,6 +3,7 @@ package ao.com.wundu.entity;
 import ao.com.wundu.enums.NotificationPreference;
 //import jakarta.persistence.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -24,6 +25,7 @@ public class User {
     private String name;
 
 //    @Column(unique = true, nullable = false, name = "e-mail")
+    @Indexed(unique = true)
     private String email;
 
 //    @Column(nullable = false)
@@ -41,6 +43,7 @@ public class User {
 
 //    @Column(name = "phone")
     // TODO: O pHone deve ser unico
+    @Indexed(unique = true)
     private String phone;
 
 //    @Column(name = "locked_until")

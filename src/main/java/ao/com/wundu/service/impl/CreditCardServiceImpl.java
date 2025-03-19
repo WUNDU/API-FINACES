@@ -51,7 +51,7 @@ public class CreditCardServiceImpl implements CreditCardService {
 
         return new CreditCardResponseDTO(
                 card.getId(), card.getCardNumber(), card.getBankName(), card.getCreditLimit(),
-                card.getExpirationDate(), userId);
+                card.getFormattedExpirationDate(), userId);
 
     }
 
@@ -66,7 +66,7 @@ public class CreditCardServiceImpl implements CreditCardService {
 
         return cards.stream()
                 .map( card -> new CreditCardResponseDTO(card.getId(), card.getCardNumber(), card.getBankName(),
-                        card.getCreditLimit(), card.getExpirationDate(), userId) )
+                        card.getCreditLimit(), card.getFormattedExpirationDate(), userId) )
                 .collect(Collectors.toList());
 
     }
@@ -78,6 +78,6 @@ public class CreditCardServiceImpl implements CreditCardService {
                 .orElseThrow( () -> new IllegalArgumentException("Cartão não encontrado") );
 
         return new CreditCardResponseDTO(card.getId(), card.getCardNumber(), card.getBankName(),
-                card.getCreditLimit(), card.getExpirationDate(), card.getUser().getId());
+                card.getCreditLimit(), card.getFormattedExpirationDate(), card.getUser().getId());
     }
 }
