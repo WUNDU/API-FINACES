@@ -3,6 +3,10 @@ package ao.com.wundu.service.impl;
 import ao.com.wundu.config.JwtUtil;
 import ao.com.wundu.dto.*;
 import ao.com.wundu.entity.User;
+import ao.com.wundu.exception.InvalidCredentialsException;
+import ao.com.wundu.exception.InvalidTokenException;
+import ao.com.wundu.exception.LockedUserException;
+import ao.com.wundu.exception.UserNotFoundException;
 import ao.com.wundu.messaging.EmailService;
 import ao.com.wundu.messaging.SmsService;
 import ao.com.wundu.repository.UserRepository;
@@ -40,10 +44,10 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponseDTO authenticate(LoginRequestDTO dto) {
 
         User user = userRepository.findByEmail(dto.email())
-                .orElseThrow( () -> new RuntimeException("E-mail ou senha incorreta") );
+                .orElseThrow( () -> new InvalidCredentialsException("E-mail ou senha incorreta") );
 
         if (user.isLocked()) {
-            throw new RuntimeException("Usuário bloqueado temporariamente. Tente novamente após " +
+            throw new LockedUserException("Usuário bloqueado temporariamente. Tente novamente após " +
                     user.getLockedUntil().toString());
         }
 
@@ -53,11 +57,11 @@ public class AuthServiceImpl implements AuthService {
                 user.setLockedUntil(LocalDateTime.now().plusMinutes(LOCK_DURATION_MINUTES));
                 user.setLoginAttempts(0);
                 userRepository.save(user);
-                throw new RuntimeException("Usuário bloqueado por " + LOCK_DURATION_MINUTES +
+                throw new LockedUserException("Usuário bloqueado por " + LOCK_DURATION_MINUTES +
                         " minutos devido a múltiplas tentativas falhas");
             }
             userRepository.save(user);
-            throw new RuntimeException("E-mail ou senha incorreta");
+            throw new InvalidCredentialsException("E-mail ou senha incorreta");
         }
         user.setLoginAttempts(0);
         user.setLockedUntil(null);
@@ -75,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
     public void requestPassWordReset(PasswordResetRequestDTO dto) {
 
         User user = userRepository.findByEmail(dto.email())
-                .orElseThrow( () -> new RuntimeException("Usuário não encontrado") );
+                .orElseThrow( () -> new UserNotFoundException("Usuário não encontrado") );
 
         String token = UUID.randomUUID().toString();
         resetTokens.put(token, dto.email()); // Armazena o token associado ao e-mail
@@ -87,7 +91,7 @@ public class AuthServiceImpl implements AuthService {
         } else if ( "sms".equals(dto.method()) ) {
             smsService.sendSms("+244" + user.getPhone(), message);
         } else {
-            throw new RuntimeException("Método de recuperação inválido");
+            throw new InvalidCredentialsException("Método de recuperação inválido");
         }
     }
 
@@ -97,10 +101,10 @@ public class AuthServiceImpl implements AuthService {
 
         String email = resetTokens.get(dto.token());
         if (email == null) {
-            throw new RuntimeException("Token inválido");
+            throw new InvalidTokenException("Token inválido");
         }
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
         user.setPassword(passwordEncoder.encode(dto.newPassword()));
         user.setLoginAttempts(0);
         user.setLocked(false);

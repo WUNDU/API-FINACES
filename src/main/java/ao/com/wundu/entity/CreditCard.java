@@ -1,45 +1,38 @@
 package ao.com.wundu.entity;
 
 
-//import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-//@Entity
-//@Table(name = "TB_cards")
-@Document(collection = "cards")
+@Entity
+@Table(name = "TB_cards")
 public class CreditCard {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.UUID)
-//    @Column(name = "id_card")
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id_card")
     private String id;
 
-//    @Column( name = "card_number", unique = true, nullable = false )
-    @Indexed(unique = true)
+    @Column( name = "card_number", unique = true, nullable = false )
     private String cardNumber;
 
-//    @Column( name = "bank_name", nullable = false )
+    @Column( name = "bank_name", nullable = false )
     private String bankName;
 
-//    @Column( name = "credit_limit", nullable = false )
+    @Column( name = "credit_limit", nullable = false )
     private BigDecimal creditLimit;
 
-//    @Column( name = "expitation_date", nullable = false )
+    @Column( name = "expitation_date", nullable = false )
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/yy")
     private LocalDate expirationDate;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-    @DBRef
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     public CreditCard() {

@@ -4,6 +4,9 @@ import ao.com.wundu.dto.CreditCardCreateDTO;
 import ao.com.wundu.dto.CreditCardResponseDTO;
 import ao.com.wundu.entity.CreditCard;
 import ao.com.wundu.entity.User;
+import ao.com.wundu.exception.CreditCardLimitExceededException;
+import ao.com.wundu.exception.CreditCardNotFoundException;
+import ao.com.wundu.exception.UserNotFoundException;
 import ao.com.wundu.repository.CreditCardRepository;
 import ao.com.wundu.repository.UserRepository;
 import ao.com.wundu.service.CreditCardService;
@@ -30,11 +33,11 @@ public class CreditCardServiceImpl implements CreditCardService {
     public CreditCardResponseDTO addCreditCard(String userId, CreditCardCreateDTO create) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow( () -> new IllegalArgumentException("Usuário não encontrado") );
+                .orElseThrow( () -> new UserNotFoundException("Usuário não encontrado") );
 
         // TODO: Altar o maximo de cartão do user para 3 na versão free
         if ( creditCardRepository.findByUserId(userId).size() >= 3 ) {
-            throw new IllegalArgumentException("Limite de 5 cartões por usuário atingido");
+            throw new CreditCardLimitExceededException("Limite de 5 cartões por usuário atingido");
         }
 
         String encryptedCardNumber = securityManager.encrypt(create.cardNumber());
@@ -59,7 +62,7 @@ public class CreditCardServiceImpl implements CreditCardService {
     public List<CreditCardResponseDTO> getCreditCardsByUser(String userId) {
 
         if ( !userRepository.existsById(userId) ) {
-            throw new IllegalArgumentException("Usuário não encontrado");
+            throw new UserNotFoundException("Usuário não encontrado");
         }
 
         List<CreditCard> cards = creditCardRepository.findByUserId(userId);
@@ -75,7 +78,7 @@ public class CreditCardServiceImpl implements CreditCardService {
     public CreditCardResponseDTO getCreaditCard(String id) {
 
         CreditCard card = creditCardRepository.findById(id)
-                .orElseThrow( () -> new IllegalArgumentException("Cartão não encontrado") );
+                .orElseThrow( () -> new CreditCardNotFoundException("Cartão não encontrado") );
 
         return new CreditCardResponseDTO(card.getId(), card.getCardNumber(), card.getBankName(),
                 card.getCreditLimit(), card.getFormattedExpirationDate(), card.getUser().getId());

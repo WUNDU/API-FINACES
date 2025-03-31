@@ -3,6 +3,8 @@ package ao.com.wundu.service.impl;
 import ao.com.wundu.dto.*;
 import ao.com.wundu.entity.CreditCard;
 import ao.com.wundu.entity.User;
+import ao.com.wundu.exception.DuplicateEmailException;
+import ao.com.wundu.exception.UserNotFoundException;
 import ao.com.wundu.messaging.EmailService;
 import ao.com.wundu.repository.CreditCardRepository;
 import ao.com.wundu.repository.UserRepository;
@@ -30,7 +32,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO createUser(UserCreateDTO create) {
 
         if ( userRepository.findByEmail(create.email()).isPresent() ) {
-            throw new IllegalArgumentException("Já existe um usuário com este email");
+            throw new DuplicateEmailException("Já existe um usuário com este email");
         }
 
         // TODO: o número de telefone tem que ser unico.
@@ -66,7 +68,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO updateUser(String id, UserUpdateDTO update) {
 
         User user = userRepository.findById(id)
-                .orElseThrow( () -> new IllegalArgumentException("Usuário não encontrado") );
+                .orElseThrow( () -> new UserNotFoundException("Usuário não encontrado") );
 
         user.setName(update.name());
 //        user.setName(update.password());
@@ -80,7 +82,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO findUserById(String id) {
 
         User user = userRepository.findById(id)
-                .orElseThrow( () -> new IllegalArgumentException("Usuário não encontrado") );
+                .orElseThrow( () -> new UserNotFoundException("Usuário não encontrado") );
 
         return new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getPhone(), user.getNotificationPreference().getValue());
     }
@@ -97,7 +99,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(String id) {
 
         if (!userRepository.existsById(id)) {
-            throw new IllegalArgumentException("Usuário não encontrado");
+            throw new UserNotFoundException("Usuário não encontrado");
         }
 
         userRepository.deleteById(id);
