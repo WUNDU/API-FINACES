@@ -16,9 +16,6 @@ public record UserUpdateDTO(
         )
         String phone,
 
-//        @Size(min = 8, message = "Password deve ter no mínimo 8 caracteres")
-//        String password,
-
         @NotBlank(message = "Preferência de notificação é obrigatória")
         String notificationPreference
 ) {

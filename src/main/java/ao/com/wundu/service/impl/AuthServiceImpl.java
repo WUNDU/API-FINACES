@@ -46,24 +46,26 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(dto.email())
                 .orElseThrow( () -> new InvalidCredentialsException("E-mail ou senha incorreta") );
 
-        if (user.isLocked()) {
+        if (user.isLocked() && user.getLockedUntil().isAfter(LocalDateTime.now())) {
             throw new LockedUserException("Usuário bloqueado temporariamente. Tente novamente após " +
-                    user.getLockedUntil().toString());
+                    user.getLockedUntil());
         }
 
         if (!passwordEncoder.matches(dto.password(), user.getPassword())) {
             user.setLoginAttempts(user.getLoginAttempts() + 1);
             if (user.getLoginAttempts() >= MAX_LOGIN_ATTEMPTS) {
+                user.setLocked(true);
                 user.setLockedUntil(LocalDateTime.now().plusMinutes(LOCK_DURATION_MINUTES));
                 user.setLoginAttempts(0);
                 userRepository.save(user);
                 throw new LockedUserException("Usuário bloqueado por " + LOCK_DURATION_MINUTES +
-                        " minutos devido a múltiplas tentativas falhas");
+                        " minutos");
             }
             userRepository.save(user);
             throw new InvalidCredentialsException("E-mail ou senha incorreta");
         }
         user.setLoginAttempts(0);
+        user.setLocked(false);
         user.setLockedUntil(null);
         userRepository.save(user);
 

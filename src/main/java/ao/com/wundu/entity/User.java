@@ -1,6 +1,7 @@
 package ao.com.wundu.entity;
 
 import ao.com.wundu.enums.NotificationPreference;
+import ao.com.wundu.enums.PlanType;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -35,12 +36,15 @@ public class User {
     @Column(name = "locked")
     private boolean locked;
 
-    @Column(name = "phone")
-    // TODO: O pHone deve ser unico
+    @Column(name = "phone", unique = true)
     private String phone;
 
     @Column(name = "locked_until")
     private LocalDateTime lockedUntil;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PlanType planType = PlanType.FREE;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CreditCard> creditCards = new ArrayList<>();
@@ -61,6 +65,18 @@ public class User {
         this.password = password;
         this.phone = phone;
         this.notificationPreference = notificationPreference;
+        this.loginAttempts = 0;
+        this.locked = false;
+    }
+
+    public User(String name, String email, String password,  String phone,
+                NotificationPreference notificationPreference, PlanType planType) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.notificationPreference = notificationPreference;
+        this.planType = planType;
         this.loginAttempts = 0;
         this.locked = false;
     }
@@ -144,5 +160,13 @@ public class User {
 
     public boolean isLocked() {
         return lockedUntil != null && LocalDateTime.now().isBefore(lockedUntil);
+    }
+
+    public PlanType getPlanType() {
+        return planType;
+    }
+
+    public void setPlanType(PlanType planType) {
+        this.planType = planType;
     }
 }
