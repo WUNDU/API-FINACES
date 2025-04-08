@@ -1,12 +1,12 @@
 server:
-  port: ${SERVER_PORT}  # Porta padrão 8089 para dev
+  port: ${SERVER_PORT:8089}  # Porta padrão 8089 para dev
 
 spring:
   datasource:
     url: ${DB_URL:jdbc:h2:mem:financeapp}
-    driverClassName: ${DB_DRIVER}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    driverClassName: ${DB_DRIVER:org.h2.Driver}
+    username: ${DB_USERNAME:teste}
+    password: ${DB_PASSWORD:teste}
   jpa:
     database-platform: ${JPA_DIALECT:org.hibernate.dialect.H2Dialect}
     hibernate:

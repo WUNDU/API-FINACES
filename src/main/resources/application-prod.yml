@@ -1,11 +1,10 @@
-server:
-  port: ${SERVER_PORT}  # Ou outra porta que você quiser
-
 spring:
   datasource:
-    url: ${MONGO_URL}
-    username: ${MONGOUSER}
-    password: ${MONGOPASSWORD}
+    datasource:
+      url: ${DATABASE_URL}
+      username: ${PGUSER}
+      password: ${PGPASSWORD}
+      driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: none  # Em prod, usaremos migrações
@@ -14,21 +13,24 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
 
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:evandre297@gmail.com}
+    password: ${MAIL_PASSWORD:e i o r a w c w k d c x v v d k}  # Use senha de app do Gmail
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH:true}
+          starttls:
+            enable: ${MAIL_STARTTLS_ENABLE:true}
+
 jwt:
-  secret: ${JWT_SECRET}
+  secret: ${JWT_SECRET:ThisIsAVeryLongAndSecureSecretKeyForJWTThatIsAtLeast64CharactersLong1234567890}
   expiration: 86400000  # 24 horas
 
 encryption:
-  key: ${ENCRYPTION_KEY}
+  key: ${ENCRYPTION_KEY:chave16bytes1234}
 
-spring.mail:
-  host: ${MAIL_HOST}
-  port: ${MAIL_PORT}
-  username: ${MAIL_USERNAME}
-  password: ${MAIL_PASSWORD}
-  properties:
-    mail:
-      smtp:
-        auth: true
-        starttls:
-          enable: true
+server:
+  port: ${SERVER_PORT:8081}  # Ou outra porta que você quiser
