@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Entity
-@Table(name = "TB_cards")
+@Table(name = "credit_cards")
 public class CreditCard {
 
     @Id

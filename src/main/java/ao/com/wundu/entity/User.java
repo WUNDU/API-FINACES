@@ -9,18 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "TB_users")
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id_user")
     private String id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = false, name = "e-mail")
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)

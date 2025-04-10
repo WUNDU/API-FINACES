@@ -1,32 +1,35 @@
 server:
-  port: ${SERVER_PORT:8089}  # Porta padrão 8089 para dev
+  port: 8081  # Porta padrão 8089 para dev
 
 spring:
   datasource:
-    url: ${DB_URL:jdbc:h2:mem:financeapp}
-    driverClassName: ${DB_DRIVER:org.h2.Driver}
-    username: ${DB_USERNAME:teste}
-    password: ${DB_PASSWORD:teste}
-  jpa:
-    database-platform: ${JPA_DIALECT:org.hibernate.dialect.H2Dialect}
-    hibernate:
-      ddl-auto: ${HIBERNATE_DDL:update}
-  h2:
-    console:
-      enabled: ${H2_CONSOLE_ENABLED:true}  # Console H2 em /h2-console
-      path: /h2-console
+      url: jdbc:postgresql://postgres:5432/finances
+      username: user
+      password: password
+      driver-class-name: org.postgresql.Driver
+      jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        hibernate:
+          ddl-auto: update
+        show-sql: true
+      flyway:
+        baseline-on-migrate: true
+        locations: classpath:db/migration
+        enabled: true
+      hikari:
+        initialization-fail-timeout: 60000
 
   mail:
-    host: ${MAIL_HOST:smtp.gmail.com}
-    port: ${MAIL_PORT:587}
-    username: ${MAIL_USERNAME:evandre297@gmail.com}
-    password: ${MAIL_PASSWORD:eiorawckdcxvvdvk}  # Use senha de app do Gmail
+    host: smtp.gmail.com
+    port: 587
+    username: evandre297@gmail.com
+    password: e i o r a w c w k d c x v v d k  # Use senha de app do Gmail
     properties:
       mail:
         smtp:
-          auth: ${MAIL_SMTP_AUTH:true}
+          auth: true
           starttls:
-            enable: ${MAIL_STARTTLS_ENABLE:true}
+            enable: true
 
 jwt:
   secret: ${JWT_SECRET:ThisIsAVeryLongAndSecureSecretKeyForJWTThatIsAtLeast64CharactersLong1234567890}

@@ -1,10 +1,9 @@
 spring:
   datasource:
-    datasource:
-      url: ${DATABASE_URL}
-      username: ${PGUSER}
-      password: ${PGPASSWORD}
-      driver-class-name: org.postgresql.Driver
+     url: postgresql://postgres.railway.internal:5432/railway
+     username: postgres
+     password: weHTShlOkxxTAFJrkISzhXtYSTseONhZ
+     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: none  # Em prod, usaremos migrações
@@ -14,16 +13,16 @@ spring:
     baseline-on-migrate: true
 
   mail:
-    host: ${MAIL_HOST:smtp.gmail.com}
-    port: ${MAIL_PORT:587}
-    username: ${MAIL_USERNAME:evandre297@gmail.com}
-    password: ${MAIL_PASSWORD:e i o r a w c w k d c x v v d k}  # Use senha de app do Gmail
+    host: smtp.gmail.com
+    port: 587
+    username: evandre297@gmail.com
+    password: e i o r a w c w k d c x v v d k # Use senha de app do Gmail
     properties:
       mail:
         smtp:
-          auth: ${MAIL_SMTP_AUTH:true}
+          auth: true
           starttls:
-            enable: ${MAIL_STARTTLS_ENABLE:true}
+            enable: true
 
 jwt:
   secret: ${JWT_SECRET:ThisIsAVeryLongAndSecureSecretKeyForJWTThatIsAtLeast64CharactersLong1234567890}
@@ -33,4 +32,4 @@ encryption:
   key: ${ENCRYPTION_KEY:chave16bytes1234}
 
 server:
-  port: ${SERVER_PORT:8081}  # Ou outra porta que você quiser
+  port: 8081  # Ou outra porta que você quiser

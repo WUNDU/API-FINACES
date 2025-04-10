@@ -3,7 +3,7 @@ package ao.com.wundu.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "TB_category")
+@Table(name = "categories")
 public class Category {
 
     @Id

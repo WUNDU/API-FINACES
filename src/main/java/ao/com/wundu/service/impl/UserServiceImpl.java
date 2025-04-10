@@ -43,25 +43,26 @@ public class UserServiceImpl implements UserService {
 
         User user = new User(create.name(), create.email(), passwordEncoder.encode(create.password()), create.phone(), create.toNotificationPreference());
         user = userRepository.save(user);
-        sendWelcomeEmail(user);
+//        sendWelcomeEmail(user);
+
+        // Enviar e-mail de boas-vindas
+        String subject = "Bem-vindo ao nosso sistema!";
+        String message = "Olá " + user.getName() + ",\n\n"
+                + "Seu cadastro foi realizado com sucesso. Estamos felizes em tê-lo(a) conosco!\n\n"
+                + "Se precisar de algo, entre em contato.\n\n"
+                + "Atenciosamente,\nWUNDU FINACES";
+
+        emailService.sendEmail(user.getEmail(), subject, message);
+
+        // Enviar notificação para o admin
+        String adminEmail = "evandre297@email.com";
+        String subjectAdmin = "Novo usuário cadastrado!";
+        String messageAdmin = "Olá Admin,\n\n"
+                + "Um novo usuário acaba de se cadastrar no sistema.\n\n"
+                + "**Nome:** " + user.getName() + "\n"
+                + "**Email:** " + user.getEmail() + "\n\n"
+                + "Atenciosamente,\nEquipe do Sistema";
         return mapToResponseDTO(user);
-//        // Enviar e-mail de boas-vindas
-//        String subject = "Bem-vindo ao nosso sistema!";
-//        String message = "Olá " + user.getName() + ",\n\n"
-//                + "Seu cadastro foi realizado com sucesso. Estamos felizes em tê-lo(a) conosco!\n\n"
-//                + "Se precisar de algo, entre em contato.\n\n"
-//                + "Atenciosamente,\nWUNDU FINACES";
-//
-//        emailService.sendEmail(user.getEmail(), subject, message);
-//
-//        // Enviar notificação para o admin
-//        String adminEmail = "evandre297@email.com";
-//        String subjectAdmin = "Novo usuário cadastrado!";
-//        String messageAdmin = "Olá Admin,\n\n"
-//                + "Um novo usuário acaba de se cadastrar no sistema.\n\n"
-//                + "**Nome:** " + user.getName() + "\n"
-//                + "**Email:** " + user.getEmail() + "\n\n"
-//                + "Atenciosamente,\nEquipe do Sistema";
 
     }
 

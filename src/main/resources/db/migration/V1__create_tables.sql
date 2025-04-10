@@ -1,5 +1,5 @@
 CREATE TABLE users (
-    id UUID PRIMARY KEY,
+    id varchar(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
@@ -10,11 +10,11 @@ CREATE TABLE users (
 );
 
 CREATE TABLE credit_cards (
-    id UUID PRIMARY KEY,
+    id varchar(255) PRIMARY KEY,
     card_number VARCHAR(255) NOT NULL,
     bank_name VARCHAR(255) NOT NULL,
     credit_limit DECIMAL(15,2) NOT NULL,
     expiration_date DATE NOT NULL,
-    user_id UUID NOT NULL,
+    user_id varchar(255) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
