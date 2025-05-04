@@ -1,6 +1,7 @@
 package ao.com.wundu.service;
 
-import ao.com.wundu.dto.*;
+import ao.com.wundu.application.dtos.TransactionCreateDTO;
+import ao.com.wundu.application.dtos.TransactionResponseDTO;
 import java.util.List;
 
 public interface TransactionService {

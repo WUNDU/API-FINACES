@@ -1,7 +1,7 @@
 package ao.com.wundu.service.impl;
 
-import ao.com.wundu.exception.DecryptionException;
-import ao.com.wundu.exception.EncryptionException;
+import ao.com.wundu.domain.exceptions.DecryptionException;
+import ao.com.wundu.domain.exceptions.EncryptionException;
 import ao.com.wundu.service.SecurityManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

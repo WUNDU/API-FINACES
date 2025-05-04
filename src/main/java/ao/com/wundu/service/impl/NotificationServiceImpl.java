@@ -1,15 +1,14 @@
 package ao.com.wundu.service.impl;
 
-import ao.com.wundu.dto.NotificationCreateDTO;
-import ao.com.wundu.dto.NotificationResponseDTO;
-import ao.com.wundu.entity.Notification;
-import ao.com.wundu.exception.NotificationNotFoundException;
-import ao.com.wundu.repository.NotificationRepository;
+import ao.com.wundu.application.dtos.NotificationCreateDTO;
+import ao.com.wundu.application.dtos.NotificationResponseDTO;
+import ao.com.wundu.domain.entities.Notification;
+import ao.com.wundu.domain.exceptions.NotificationNotFoundException;
+import ao.com.wundu.infrastructure.repositories.NotificationRepository;
 import ao.com.wundu.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
+
 import java.util.List;
 
 @Service

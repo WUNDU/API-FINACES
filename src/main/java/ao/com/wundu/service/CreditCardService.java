@@ -1,7 +1,7 @@
 package ao.com.wundu.service;
 
-import ao.com.wundu.dto.CreditCardCreateDTO;
-import ao.com.wundu.dto.CreditCardResponseDTO;
+import ao.com.wundu.application.dtos.CreditCardCreateDTO;
+import ao.com.wundu.application.dtos.CreditCardResponseDTO;
 
 import java.util.List;
 
