@@ -1,16 +1,18 @@
 package ao.com.wundu.service.impl;
 
-import ao.com.wundu.dto.*;
-import ao.com.wundu.entity.Transaction;
-import ao.com.wundu.exception.CreditCardNotFoundException;
-import ao.com.wundu.exception.InvalidTransactionAmountException;
-import ao.com.wundu.exception.TransactionNotFoundException;
-import ao.com.wundu.repository.TransactionRepository;
+import ao.com.wundu.application.dtos.TransactionCreateDTO;
+import ao.com.wundu.application.dtos.TransactionResponseDTO;
+import ao.com.wundu.domain.entities.CreditCard;
+import ao.com.wundu.domain.entities.Transaction;
+import ao.com.wundu.domain.exceptions.CreditCardNotFoundException;
+import ao.com.wundu.domain.exceptions.InvalidTransactionAmountException;
+import ao.com.wundu.domain.exceptions.TransactionNotFoundException;
+import ao.com.wundu.infrastructure.repositories.CreditCardRepository;
+import ao.com.wundu.infrastructure.repositories.TransactionRepository;
+import ao.com.wundu.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ao.com.wundu.service.TransactionService;
-import ao.com.wundu.entity.CreditCard;
-import ao.com.wundu.repository.CreditCardRepository;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

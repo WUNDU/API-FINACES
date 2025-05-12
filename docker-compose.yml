@@ -29,7 +29,7 @@ services:
     ports:
       - "8082:8081"
     environment:
-      SPRING_PROFILES_ACTIVE: prod
+      SPRING_PROFILES_ACTIVE: dev
     depends_on:
       postgres:
         condition: service_healthy

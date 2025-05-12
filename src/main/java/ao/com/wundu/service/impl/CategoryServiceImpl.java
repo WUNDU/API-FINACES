@@ -1,14 +1,14 @@
 package ao.com.wundu.service.impl;
 
-import ao.com.wundu.dto.CategoryCreateDTO;
-import ao.com.wundu.dto.CategoryResponseDTO;
-import ao.com.wundu.dto.CategoryUpdateDTO;
-import ao.com.wundu.entity.Category;
-import ao.com.wundu.entity.Transaction;
-import ao.com.wundu.exception.CategoryNotFoundException;
-import ao.com.wundu.exception.TransactionNotFoundException;
-import ao.com.wundu.repository.CategoryRepository;
-import ao.com.wundu.repository.TransactionRepository;
+import ao.com.wundu.application.dtos.CategoryCreateDTO;
+import ao.com.wundu.application.dtos.CategoryResponseDTO;
+import ao.com.wundu.application.dtos.CategoryUpdateDTO;
+import ao.com.wundu.domain.entities.Category;
+import ao.com.wundu.domain.entities.Transaction;
+import ao.com.wundu.domain.exceptions.CategoryNotFoundException;
+import ao.com.wundu.domain.exceptions.TransactionNotFoundException;
+import ao.com.wundu.infrastructure.repositories.CategoryRepository;
+import ao.com.wundu.infrastructure.repositories.TransactionRepository;
 import ao.com.wundu.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

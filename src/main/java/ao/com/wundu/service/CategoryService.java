@@ -1,6 +1,8 @@
 package ao.com.wundu.service;
 
-import ao.com.wundu.dto.*;
+import ao.com.wundu.application.dtos.CategoryCreateDTO;
+import ao.com.wundu.application.dtos.CategoryResponseDTO;
+import ao.com.wundu.application.dtos.CategoryUpdateDTO;
 
 import java.util.List;
 
