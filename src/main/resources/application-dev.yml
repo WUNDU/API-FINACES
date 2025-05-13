@@ -38,6 +38,12 @@ jwt:
 encryption:
   key: ${ENCRYPTION_KEY:chave16bytes1234}
 
+credit:
+  card:
+    limit:
+      free: 1
+      premium: 3
+
 springdoc:
   api-docs:
     path: /api-docs

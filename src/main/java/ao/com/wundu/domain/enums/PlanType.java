@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 public enum PlanType {
 
-    FREE("free"),
-    PREMIUM("premium");
+    FREE("FREE"),
+    PREMIUM("PREMIUM");
 
     private final String value;
 
