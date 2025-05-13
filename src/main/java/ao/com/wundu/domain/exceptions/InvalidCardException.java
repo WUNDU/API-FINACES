@@ -2,9 +2,9 @@ package ao.com.wundu.domain.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class CreditCardLimitExceededException extends BusinessException{
+public class InvalidCardException extends BusinessException {
 
-    public CreditCardLimitExceededException(String message) {
+    public InvalidCardException(String message) {
         super(message, HttpStatus.BAD_REQUEST);
     }
 }
