@@ -2,6 +2,7 @@ package ao.com.wundu.domain.entities;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "transactions")
@@ -10,20 +11,24 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(nullable = false)
     private Double amount;
 
+    @Column
     private String description;
 
+    @Column(nullable = false)
     private String type;
 
+    @CreationTimestamp
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
     @ManyToOne
-    @JoinColumn(name = "creditcard_id")
+    @JoinColumn(name = "credit_card_id", nullable = false)
     private CreditCard creditCard;
 
-    @OneToOne
-    @JoinColumn(name = "category_id")
+    @OneToOne(mappedBy = "transaction", cascade = CascadeType.ALL)
     private Category category;
 
     public Transaction() {
@@ -51,20 +56,40 @@ public class Transaction {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public Double getAmount() {
         return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getType() {
         return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public LocalDateTime getDateTime() {
         return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public CreditCard getCreditCard() {

@@ -1,9 +1,14 @@
 package ao.com.wundu.presentation.controllers;
 
-import ao.com.wundu.application.dtos.CategoryCreateDTO;
-import ao.com.wundu.application.dtos.CategoryResponseDTO;
-import ao.com.wundu.application.dtos.CategoryUpdateDTO;
-import ao.com.wundu.service.CategoryService;
+import ao.com.wundu.application.dtos.category.CategoryCreateDTO;
+import ao.com.wundu.application.dtos.category.CategoryResponseDTO;
+import ao.com.wundu.application.usercases.category.CreateCategoryUseCase;
+import ao.com.wundu.application.usercases.category.FindCategoryUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,34 +20,34 @@ import java.util.List;
 @RequestMapping("/api/categories")
 public class CategoryController {
 
-    @Autowired
-    private CategoryService categoryService;
+    private static final Logger logger = LoggerFactory.getLogger(CategoryController.class);
 
-    @PostMapping("/{transactionId}")
-    public ResponseEntity<CategoryResponseDTO> createCategory(@PathVariable String transactionId,
-                                                              @RequestBody CategoryCreateDTO create) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCategory(transactionId, create));
+    private final CreateCategoryUseCase createCategoryUseCase;
+    private final FindCategoryUseCase findCategoryUseCase;
+
+    public CategoryController(CreateCategoryUseCase createCategoryUseCase, FindCategoryUseCase findCategoryUseCase) {
+        this.createCategoryUseCase = createCategoryUseCase;
+        this.findCategoryUseCase = findCategoryUseCase;
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable String id,
-            @RequestBody CategoryUpdateDTO update) {
-        return ResponseEntity.ok(categoryService.updateCategory(id, update));
+    @PostMapping("/transaction/{transactionId}")
+    @Operation(summary = "Create a category for a transaction")
+    @ApiResponse(responseCode = "201", description = "Category created successfully")
+    public ResponseEntity<CategoryResponseDTO> createCategory(
+            @PathVariable String transactionId,
+            @Valid @RequestBody CategoryCreateDTO dto
+    ) {
+        logger.info("Criando categoria para transação: {}", transactionId);
+        CategoryResponseDTO response = createCategoryUseCase.execute(transactionId, dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponseDTO> findCategoryById(@PathVariable String id) {
-        return ResponseEntity.ok(categoryService.findCategoryById(id));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<CategoryResponseDTO>> findAllCategories() {
-        return ResponseEntity.ok(categoryService.findAllCategories());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable String id) {
-        categoryService.deleteCategory(id);
-        return ResponseEntity.noContent().build();
+    @Operation(summary = "Find a category by ID")
+    @ApiResponse(responseCode = "200", description = "Category found")
+    public ResponseEntity<CategoryResponseDTO> findCategory(@PathVariable String id) {
+        logger.info("Buscando categoria: {}", id);
+        CategoryResponseDTO response = findCategoryUseCase.execute(id);
+        return ResponseEntity.ok(response);
     }
 }

@@ -1,8 +1,11 @@
 package ao.com.wundu.presentation.controllers;
 
-import ao.com.wundu.application.dtos.NotificationCreateDTO;
-import ao.com.wundu.application.dtos.NotificationResponseDTO;
-import ao.com.wundu.service.NotificationService;
+import ao.com.wundu.application.dtos.notification.NotificationResponseDTO;
+import ao.com.wundu.application.usercases.notification.MarkNotificationAsReadUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,22 +16,20 @@ import java.util.List;
 @RequestMapping("/api/notifications")
 public class NotificationController {
 
-    @Autowired
-    private NotificationService notificationService;
+    private static final Logger logger = LoggerFactory.getLogger(NotificationController.class);
 
-    @PostMapping
-    public ResponseEntity<NotificationResponseDTO> createNotification(@RequestBody NotificationCreateDTO create) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(notificationService.createNotification(create));
-    }
+    private final MarkNotificationAsReadUseCase markNotificationAsReadUseCase;
 
-    @GetMapping
-    public ResponseEntity<List<NotificationResponseDTO>> findAllNotifications() {
-        return ResponseEntity.ok(notificationService.findAllNotifications());
+    public NotificationController(MarkNotificationAsReadUseCase markNotificationAsReadUseCase) {
+        this.markNotificationAsReadUseCase = markNotificationAsReadUseCase;
     }
 
     @PatchMapping("/{id}/read")
-    public ResponseEntity<Void> markAsRead(@PathVariable String id) {
-        notificationService.markAsRead(id);
-        return ResponseEntity.noContent().build();
+    @Operation(summary = "Mark a notification as read")
+    @ApiResponse(responseCode = "200", description = "Notification marked as read")
+    public ResponseEntity<NotificationResponseDTO> markAsRead(@PathVariable String id) {
+        logger.info("Marcando notificação como lida: {}", id);
+        NotificationResponseDTO response = markNotificationAsReadUseCase.execute(id);
+        return ResponseEntity.ok(response);
     }
 }

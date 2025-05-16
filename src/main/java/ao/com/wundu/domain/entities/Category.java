@@ -8,47 +8,49 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String idCategory;
+    private String id;
 
     @Column(nullable = false)
-    private String nameCategory;
+    private String name;
 
     @Column(nullable = false)
     private String description;
 
-    @OneToOne(mappedBy = "category", cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_transaction")
+    @OneToOne
+    @JoinColumn(name = "transaction_id")
     private Transaction transaction;
 
     public Category() {
     }
 
-    public Category(String nameCategory, String description, Transaction transaction) {
-        this.nameCategory = nameCategory;
+    public Category(String name, String description, Transaction transaction) {
+        this.name = name;
         this.description = description;
         this.transaction = transaction;
     }
 
-    // Getters e Setters
+    public String getId() {
+        return id;
+    }
 
-    public String getIdCategory() {
-        return idCategory;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public String getNameCategory() {
-        return nameCategory;
-    }
-
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setNameCategory(String nameCategory) {
-        this.nameCategory = nameCategory;
     }
 
     public Transaction getTransaction() {

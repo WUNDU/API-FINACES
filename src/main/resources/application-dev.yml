@@ -43,6 +43,9 @@ credit:
     limit:
       free: 1
       premium: 3
+sms:
+  mock:
+    enabled: true
 
 springdoc:
   api-docs:
