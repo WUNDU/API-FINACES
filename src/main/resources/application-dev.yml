@@ -50,10 +50,17 @@ sms:
 springdoc:
   api-docs:
     path: /api-docs
-    enabled: true
   swagger-ui:
     path: /swagger-ui.html
     enabled: true
+  packages-to-scan: ao.com.wundu
+  paths-to-match: /api/**
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
 
 #server:
 #  port: ${SERVER_PORT:8089}

@@ -64,17 +64,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, ex.getStatus());
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handlerGenericException(Exception ex) {
-        ErrorResponse errorResponse = new ErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                "Ocorreu um erro interno no servidor"
-        );
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ErrorResponse> handlerGenericException(Exception ex, WebRequest request) throws Exception {
+//        ErrorResponse errorResponse = new ErrorResponse(
+//                LocalDateTime.now(),
+//                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+//                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+//                "Ocorreu um erro interno no servidor"
+//        );
+//
+//        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
