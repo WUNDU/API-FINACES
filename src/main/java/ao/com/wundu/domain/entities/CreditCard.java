@@ -1,9 +1,6 @@
 package ao.com.wundu.domain.entities;
 
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +16,7 @@ public class CreditCard {
     private String id;
 
     @Column(name = "card_number", unique = true, nullable = false)
-    private String cardNumber; // Armazena número criptografado
+    private String cardNumber;
 
     @Column(name = "last_four_digits", nullable = false)
     private String lastFourDigits;
@@ -36,6 +33,12 @@ public class CreditCard {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Column(name = "plaid_access_token", columnDefinition = "TEXT")
+    private String plaidAccessToken;
+
+    @Column(name = "plaid_item_id", columnDefinition = "TEXT")
+    private String plaidItemId;
 
     public CreditCard() {
     }
@@ -68,7 +71,6 @@ public class CreditCard {
     }
 
     public String getMaskedCardNumber() {
-        // Exibe apenas os últimos 4 dígitos (ex.: **** **** **** 1234)
         if (cardNumber == null || cardNumber.length() < 4) {
             return "**** **** **** ****";
         }
@@ -147,5 +149,21 @@ public class CreditCard {
             return false;
         }
         return expirationDate.isAfter(LocalDate.now());
+    }
+
+    public String getPlaidAccessToken() {
+        return plaidAccessToken;
+    }
+
+    public void setPlaidAccessToken(String plaidAccessToken) {
+        this.plaidAccessToken = plaidAccessToken;
+    }
+
+    public String getPlaidItemId() {
+        return plaidItemId;
+    }
+
+    public void setPlaidItemId(String plaidItemId) {
+        this.plaidItemId = plaidItemId;
     }
 }

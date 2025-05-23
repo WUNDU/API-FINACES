@@ -62,6 +62,11 @@ logging:
       springframework:
         security: DEBUG
 
+plaid:
+  client-id: ${PLAID_CLIENT_ID:67e016cd90625d0022c97d1f}
+  secret: ${PLAID_SECRET:c472aa12f766c0775e81424b237312}
+  env: sandbox
+
 #server:
 #  port: ${SERVER_PORT:8089}
 #

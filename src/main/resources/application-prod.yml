@@ -51,3 +51,8 @@ springdoc:
 
 server:
   port: 8081  # Ou outra porta que você quiser
+
+plaid:
+  client-id: ${PLAID_CLIENT_ID:67e016cd90625d0022c97d1f}
+  secret: ${PLAID_SECRET:c472aa12f766c0775e81424b237312}
+  env: production

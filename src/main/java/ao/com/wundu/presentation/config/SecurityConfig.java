@@ -43,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/users/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                        .requestMatchers("/api/plaid/**").permitAll()
                         .requestMatchers("/api/credit-cards/**").authenticated()
                         .anyRequest().authenticated()
                 )
