@@ -17,8 +17,8 @@ public class PlaidController {
         this.plaidService = plaidService;
     }
 
-    @GetMapping("/create-link-token")
-    public ResponseEntity<PlaidLinkTokenResponse> createLinkToken(@RequestParam String userId) {
+    @GetMapping("/link-token/user/{userId}")
+    public ResponseEntity<PlaidLinkTokenResponse> createLinkToken(@PathVariable String userId) {
         System.out.println("🔔 Recebida requisição para gerar link_token para o usuário: " + userId);
 
         try {
