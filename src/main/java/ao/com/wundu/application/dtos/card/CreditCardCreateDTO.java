@@ -1,7 +1,6 @@
 package ao.com.wundu.application.dtos.card;
 
 import jakarta.validation.constraints.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -20,7 +19,13 @@ public record CreditCardCreateDTO(
 
         @NotNull(message = "Data de expiração é obrigatória")
         @Future(message = "Data de expiração deve ser futura")
-        LocalDate expirationDate
+        LocalDate expirationDate,
+
+        @NotBlank(message = "Plaid Access Token é obrigatório")
+        String plaidAccessToken,
+
+        @NotBlank(message = "Plaid Item ID é obrigatório")
+        String plaidItemId
 
 ) {
 }

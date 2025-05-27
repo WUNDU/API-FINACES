@@ -4,6 +4,8 @@ CREATE TABLE credit_cards (
     bank_name VARCHAR(255) NOT NULL,
     credit_limit NUMERIC(19,2) NOT NULL,
     expiration_date DATE NOT NULL,
+    plaid_access_token TEXT,
+    plaid_item_id TEXT,
     user_id VARCHAR(255) NOT NULL,
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
 );

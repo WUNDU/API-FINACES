@@ -43,14 +43,16 @@ public class CreditCard {
     public CreditCard() {
     }
 
-    public CreditCard(String cardNumber, String bankName, BigDecimal creditLimit, LocalDate expirationDate, User user) {
+    public CreditCard(String cardNumber, String bankName, BigDecimal creditLimit, LocalDate expirationDate, User user, String plaidAccessToken, String plaidItemId) {
         this.cardNumber = cardNumber;
         this.bankName = bankName;
         this.creditLimit = creditLimit;
         this.expirationDate = expirationDate;
         this.user = user;
+        this.plaidAccessToken = plaidAccessToken;
+        this.plaidItemId = plaidItemId;
     }
-
+    
     public String getId() {
         return id;
     }

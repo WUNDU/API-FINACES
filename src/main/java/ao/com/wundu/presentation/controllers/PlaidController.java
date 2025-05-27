@@ -3,6 +3,7 @@ package ao.com.wundu.presentation.controllers;
 import ao.com.wundu.application.dtos.plaid.PlaidTokenExchangeRequest;
 import ao.com.wundu.application.dtos.plaid.PlaidTokenExchangeResponse;
 import ao.com.wundu.application.dtos.plaid.PlaidLinkTokenResponse;
+import ao.com.wundu.application.usercases.user.FindUserByIdUseCase;
 import ao.com.wundu.infrastructure.services.PlaidService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public class PlaidController {
 
     private final PlaidService plaidService;
+    private final FindUserByIdUseCase findUserByIdUseCase;
 
-    public PlaidController(PlaidService plaidService) {
+    public PlaidController(PlaidService plaidService, FindUserByIdUseCase findUserByIdUseCase) {
         this.plaidService = plaidService;
+        this.findUserByIdUseCase = findUserByIdUseCase;
     }
 
     @GetMapping("/link-token/user/{userId}")
@@ -22,12 +25,13 @@ public class PlaidController {
         System.out.println("🔔 Recebida requisição para gerar link_token para o usuário: " + userId);
 
         try {
+            findUserByIdUseCase.execute(userId);
             PlaidLinkTokenResponse response = plaidService.createLinkToken(userId);
             System.out.println("✅ link_token gerado com sucesso: " + response.getLinkToken());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             System.out.println("❌ Erro ao gerar link_token: " + e.getMessage());
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
@@ -44,5 +48,4 @@ public class PlaidController {
             return ResponseEntity.badRequest().build();
         }
     }
-
 }

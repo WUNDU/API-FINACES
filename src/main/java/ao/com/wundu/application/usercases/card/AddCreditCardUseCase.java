@@ -49,13 +49,11 @@ public class AddCreditCardUseCase {
     public CreditCardResponseDTO execute(String userId, CreditCardCreateDTO dto) {
         logger.info("Iniciando adição de cartão para usuário: {}", userId);
 
-        // Validar DTO
         if (dto == null || dto.cardNumber() == null || dto.bankName() == null || dto.creditLimit() == null || dto.expirationDate() == null) {
             logger.error("CreditCardCreateDTO contém campos nulos: {}", dto);
             throw new IllegalArgumentException("Todos os campos do cartão são obrigatórios");
         }
 
-        // Validar cartão
         if (!CreditCard.validateCardNumber(dto.cardNumber())) {
             logger.error("Número de cartão inválido: {}", dto.cardNumber());
             throw new InvalidCardException("Número de cartão inválido");
@@ -68,14 +66,12 @@ public class AddCreditCardUseCase {
             throw new InvalidCardException("Data de expiração deve ser futura");
         }
 
-        // Verificar usuário
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> {
                     logger.error("Usuário não encontrado: {}", userId);
                     return new UserNotFoundException("Usuário não encontrado");
                 });
 
-        // Verificar limite de cartões
         int currentCardCount = creditCardRepository.findByUserId(userId).size();
         String planType = user.getPlanType() != null ? user.getPlanType().toString() : "FREE";
         logger.debug("Plano do usuário: {}, Contagem atual de cartões: {}, Limite FREE: {}, Limite PREMIUM: {}",
@@ -86,29 +82,27 @@ public class AddCreditCardUseCase {
             throw new CreditCardLimitExceededException("Limite de " + maxCards + " cartões atingido");
         }
 
-        // Mapear DTO para entidade com número original
         CreditCard card;
         try {
             card = creditCardMapper.toEntity(dto);
-            String originalCardNumber = dto.cardNumber();
-            card.setCardNumber(originalCardNumber); // Define o número original para extrair lastFourDigits
+            card.setCardNumber(dto.cardNumber());
             logger.debug("LastFourDigits após setCardNumber com número original: {}", card.getLastFourDigits());
+
+            // Criptografar accessToken e itemId
+            if (dto.accessToken() != null) {
+                card.setAccessToken(encryptionService.encrypt(dto.accessToken()));
+            }
+            if (dto.itemId() != null) {
+                card.setItemId(encryptionService.encrypt(dto.itemId()));
+            }
+
         } catch (Exception e) {
-            logger.error("Erro ao mapear CreditCardCreateDTO para entidade: {}", dto, e);
-            throw new RuntimeException("Erro ao mapear dados do cartão", e);
+            logger.error("Erro ao mapear ou criptografar dados sensíveis do cartão: {}", dto, e);
+            throw new RuntimeException("Erro ao processar dados do cartão", e);
         }
+
         card.setUser(user);
 
-        // Criptografar número do cartão
-        String encryptedCardNumber;
-        try {
-            encryptedCardNumber = encryptionService.encrypt(dto.cardNumber());
-        } catch (Exception e) {
-            logger.error("Erro ao criptografar número do cartão para usuário: {}", userId, e);
-            throw new RuntimeException("Erro ao criptografar número do cartão", e);
-        }
-
-        // Salvar cartão
         try {
             card = creditCardRepository.save(card);
             logger.info("Cartão adicionado com sucesso para usuário: {}", userId);
@@ -117,7 +111,6 @@ public class AddCreditCardUseCase {
             throw new RuntimeException("Erro ao salvar cartão no banco de dados", e);
         }
 
-        // Mapear para DTO de resposta
         try {
             return creditCardMapper.toResponseDTO(card);
         } catch (Exception e) {
