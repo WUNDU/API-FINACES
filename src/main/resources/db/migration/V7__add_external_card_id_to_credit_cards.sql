@@ -1,0 +1,2 @@
+ALTER TABLE credit_cards
+ADD COLUMN external_card_id VARCHAR(255) NOT NULL UNIQUE;

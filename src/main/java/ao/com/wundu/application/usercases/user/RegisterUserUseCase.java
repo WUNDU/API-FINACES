@@ -47,7 +47,7 @@ public class RegisterUserUseCase {
         user.setPassword(passwordEncoder.encode(dto.password()));
         user = userRepository.save(user);
 
-        sendWelcomeEmail(user);
+//        sendWelcomeEmail(user);
 
         return userMapper.toResponseDTO(user);
     }

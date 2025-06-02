@@ -1,22 +1,23 @@
 package ao.com.wundu.application.dtos.card;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public record CreditCardCreateDTO(
+public record AssociateCreditCardRequestDTO(
+
+        @NotBlank(message = "ID do usuário é obrigatório")
+        String userId,
 
         @NotBlank(message = "Número do cartão é obrigatório")
         @Pattern(regexp = "\\d{16}", message = "Número do cartão deve ter 16 dígitos")
         String cardNumber,
 
-        @NotBlank(message = "Nome do banco é obrigatório")
-        String bankName,
-
         @NotNull(message = "Data de expiração é obrigatória")
         @Future(message = "Data de expiração deve ser futura")
         LocalDate expirationDate
-
 ) {
 }

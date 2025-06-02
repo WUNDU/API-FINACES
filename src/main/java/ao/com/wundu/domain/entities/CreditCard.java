@@ -18,17 +18,14 @@ public class CreditCard {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(name = "external_card_id", unique = true, nullable = false)
+    private String externalCardId; // Novo campo para cardId da Wundu Banking API
+
     @Column(name = "card_number", unique = true, nullable = false)
     private String cardNumber; // Armazena número criptografado
 
-    @Column(name = "last_four_digits", nullable = false)
-    private String lastFourDigits;
-
     @Column(name = "bank_name", nullable = false)
     private String bankName;
-
-    @Column(name = "credit_limit", nullable = false)
-    private BigDecimal creditLimit;
 
     @Column(name = "expiration_date", nullable = false)
     private LocalDate expirationDate;
@@ -40,10 +37,9 @@ public class CreditCard {
     public CreditCard() {
     }
 
-    public CreditCard(String cardNumber, String bankName, BigDecimal creditLimit, LocalDate expirationDate, User user) {
+    public CreditCard(String cardNumber, String bankName, LocalDate expirationDate, User user) {
         this.cardNumber = cardNumber;
         this.bankName = bankName;
-        this.creditLimit = creditLimit;
         this.expirationDate = expirationDate;
         this.user = user;
     }
@@ -56,14 +52,19 @@ public class CreditCard {
         this.id = id;
     }
 
+    public String getExternalCardId() {
+        return externalCardId;
+    }
+
+    public void setExternalCardId(String externalCardId) {
+        this.externalCardId = externalCardId;
+    }
+
     public String getCardNumber() {
         return cardNumber;
     }
 
     public void setCardNumber(String cardNumber) {
-        if (this.lastFourDigits == null && cardNumber != null && cardNumber.length() >= 4 && cardNumber.matches("\\d{16}")) {
-            this.lastFourDigits = cardNumber.substring(cardNumber.length() - 4);
-        }
         this.cardNumber = cardNumber;
     }
 
@@ -83,14 +84,6 @@ public class CreditCard {
         this.bankName = bankName;
     }
 
-    public BigDecimal getCreditLimit() {
-        return creditLimit;
-    }
-
-    public void setCreditLimit(BigDecimal creditLimit) {
-        this.creditLimit = creditLimit;
-    }
-
     public LocalDate getExpirationDate() {
         return expirationDate;
     }
@@ -105,14 +98,6 @@ public class CreditCard {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public String getLastFourDigits() {
-        return lastFourDigits;
-    }
-
-    public void setLastFourDigits(String lastFourDigits) {
-        this.lastFourDigits = lastFourDigits;
     }
 
     public String getFormattedExpirationDate() {

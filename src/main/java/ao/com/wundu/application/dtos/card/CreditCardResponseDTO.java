@@ -6,7 +6,6 @@ public record CreditCardResponseDTO(
         String id,
         String maskedCardNumber,
         String bankName,
-        BigDecimal creditLimit,
         String expirationDate,
         String userId
 ) {

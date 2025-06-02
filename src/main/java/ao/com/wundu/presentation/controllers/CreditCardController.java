@@ -1,8 +1,9 @@
 package ao.com.wundu.presentation.controllers;
 
+import ao.com.wundu.application.dtos.card.AssociateCreditCardRequestDTO;
 import ao.com.wundu.application.dtos.card.CreditCardCreateDTO;
 import ao.com.wundu.application.dtos.card.CreditCardResponseDTO;
-import ao.com.wundu.application.usercases.card.AddCreditCardUseCase;
+import ao.com.wundu.application.usercases.card.AssociateCreditCardUseCase;
 import ao.com.wundu.application.usercases.card.ListCreditCardsUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,9 +12,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,31 +26,26 @@ public class CreditCardController {
 
     private static final Logger logger = LoggerFactory.getLogger(CreditCardController.class);
 
-    private final AddCreditCardUseCase addCreditCardUseCase;
+    private final AssociateCreditCardUseCase associateCreditCardUseCase;
     private final ListCreditCardsUseCase listCreditCardsUseCase;
 
-    public CreditCardController(AddCreditCardUseCase addCreditCardUseCase, ListCreditCardsUseCase listCreditCardsUseCase) {
-        this.addCreditCardUseCase = addCreditCardUseCase;
+    public CreditCardController(AssociateCreditCardUseCase associateCreditCardUseCase, ListCreditCardsUseCase listCreditCardsUseCase) {
+        this.associateCreditCardUseCase = associateCreditCardUseCase;
         this.listCreditCardsUseCase = listCreditCardsUseCase;
     }
 
-    @PostMapping("/user/{userId}")
-    @Operation(summary = "Link a credit card to a user", description = "adds a credit card to an existing user")
+    @PostMapping("/user/associate")
+    @Operation(summary = "Link a credit card to a user", description = "Associates a credit card to an authenticated user")
     @ApiResponse(responseCode = "200", description = "Credit card linked successfully")
     @ApiResponse(responseCode = "400", description = "Invalid input or limit reached")
     @ApiResponse(responseCode = "404", description = "User not found")
     @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<CreditCardResponseDTO> addCreditCard(
-            @Parameter(description = "User ID", required = true, example = "b28906bf-561b-4b61-9bd4-fd7c23eec23f")
-            @PathVariable String userId,
-            @Parameter(description = "Credit Card data for creation", required = true)
-            @Valid @RequestBody CreditCardCreateDTO create
-            ) {
-        logger.info("Recebida solicitação para adicionar cartão para usuário: {}", userId);
-        CreditCardResponseDTO response = addCreditCardUseCase.execute(userId, create);
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(response);
+    public ResponseEntity<CreditCardResponseDTO> associateCard(
+            @Valid @RequestBody AssociateCreditCardRequestDTO dto
+    ) throws Exception {
+        logger.info("Recebida solicitação para associar cartão para usuário autenticado", dto.userId());
+        CreditCardResponseDTO response = associateCreditCardUseCase.execute(dto.userId(), dto);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/user/{userId}")

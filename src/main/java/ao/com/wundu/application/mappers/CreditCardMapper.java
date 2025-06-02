@@ -25,7 +25,6 @@ public class CreditCardMapper {
             CreditCard card = new CreditCard();
             card.setCardNumber(src.cardNumber() != null ? src.cardNumber() : "");
             card.setBankName(src.bankName() != null ? src.bankName() : "");
-            card.setCreditLimit(src.creditLimit());
             card.setExpirationDate(src.expirationDate());
             return card;
         };
@@ -42,7 +41,6 @@ public class CreditCardMapper {
                     src.getId(),
                     src.getMaskedCardNumber() != null ? src.getMaskedCardNumber() : "**** **** **** ****",
                     src.getBankName(),
-                    src.getCreditLimit(),
                     src.getExpirationDate() != null ? src.getFormattedExpirationDate() : null,
                     src.getUser() != null ? src.getUser().getId() : null
             );

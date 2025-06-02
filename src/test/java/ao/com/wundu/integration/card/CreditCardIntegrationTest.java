@@ -122,7 +122,6 @@ public class CreditCardIntegrationTest {
         CreditCardCreateDTO cardDTO = new CreditCardCreateDTO(
                 "4532015112830366",
                 "Test Bank",
-                new BigDecimal("1000.00"),
                 LocalDate.now().plusMonths(1)
         );
 
@@ -155,7 +154,6 @@ public class CreditCardIntegrationTest {
         CreditCardCreateDTO invalidCardDTO = new CreditCardCreateDTO(
                 "4532015112830367",
                 "Test Bank",
-                new BigDecimal("1000.00"),
                 LocalDate.now().plusMonths(1)
         );
 
@@ -176,7 +174,6 @@ public class CreditCardIntegrationTest {
         CreditCardCreateDTO expiredCardDTO = new CreditCardCreateDTO(
                 "4532015112830366",
                 "Test Bank",
-                new BigDecimal("1000.00"),
                 expiredDate
         );
 
@@ -198,7 +195,6 @@ public class CreditCardIntegrationTest {
         CreditCardCreateDTO cardDTO = new CreditCardCreateDTO(
                 "4532015112830366",
                 "Test Bank",
-                new BigDecimal("1000.00"),
                 LocalDate.now().plusMonths(1)
         );
         for (int i = 0; i < 1; i++) { // Limite do plano FREE é 1
@@ -231,7 +227,6 @@ public class CreditCardIntegrationTest {
         CreditCardCreateDTO cardDTO = new CreditCardCreateDTO(
                 "4532015112830366",
                 "Test Bank",
-                new BigDecimal("1000.00"),
                 LocalDate.now().plusMonths(1)
         );
         for (int i = 0; i < 3; i++) { // Limite do plano PREMIUM é 3

@@ -31,6 +31,15 @@ spring:
           starttls:
             enable: true
 
+  rabbitmq:
+    host: rabbitmqbanking
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        prefetch: 1
+
 jwt:
   secret: ${JWT_SECRET:ThisIsAVeryLongAndSecureSecretKeyForJWTThatIsAtLeast64CharactersLong1234567890}
   expiration: ${JWT_EXPIRATION:86400000}
@@ -56,35 +65,14 @@ springdoc:
   packages-to-scan: ao.com.wundu
   paths-to-match: /api/**
 
+wundu:
+  banking:
+    api:
+      url: http://wundu-banking:8081/api
+      key: 123456789SECRETKEY
+
 logging:
   level:
     org:
       springframework:
         security: DEBUG
-
-#server:
-#  port: ${SERVER_PORT:8089}
-#
-#spring:
-#  data:
-#    mongodb:
-#      uri: mongodb+srv://kelvinfabio2:lPq9vxc6BvOXwdEE@cluster0.btttn.mongodb.net/financialdb?retryWrites=true&w=majority
-#      database: financialdb
-#  mail:
-#    host: ${MAIL_HOST:smtp.gmail.com}
-#    port: ${MAIL_PORT:587}
-#    username: ${MAIL_USERNAME:evandre297@gmail.com}
-#    password: ${MAIL_PASSWORD:eiorawckdcxvvdvk}
-#    properties:
-#      mail:
-#        smtp:
-#          auth: ${MAIL_SMTP_AUTH:true}
-#          starttls:
-#            enable: ${MAIL_STARTTLS_ENABLE:true}
-#
-#jwt:
-#  secret: ${JWT_SECRET:ThisIsAVeryLongAndSecureSecretKeyForJWTThatIsAtLeast64CharactersLong1234567890}
-#  expiration: ${JWT_EXPIRATION:86400000}
-#
-#encryption:
-#  key: ${ENCRYPTION_KEY:chave16bytes1234}
