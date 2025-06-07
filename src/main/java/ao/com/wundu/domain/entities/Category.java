@@ -2,6 +2,9 @@ package ao.com.wundu.domain.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -16,17 +19,15 @@ public class Category {
     @Column(nullable = false)
     private String description;
 
-    @OneToOne
-    @JoinColumn(name = "transaction_id")
-    private Transaction transaction;
+    @OneToMany(mappedBy = "category")
+    private List<Transaction> transactions = new ArrayList<>();
 
     public Category() {
     }
 
-    public Category(String name, String description, Transaction transaction) {
+    public Category(String name, String description) {
         this.name = name;
         this.description = description;
-        this.transaction = transaction;
     }
 
     public String getId() {
@@ -53,11 +54,11 @@ public class Category {
         this.description = description;
     }
 
-    public Transaction getTransaction() {
-        return transaction;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 }

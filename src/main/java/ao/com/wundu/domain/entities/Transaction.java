@@ -28,7 +28,8 @@ public class Transaction {
     @JoinColumn(name = "credit_card_id", nullable = false)
     private CreditCard creditCard;
 
-    @OneToOne(mappedBy = "transaction", cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
 
     public Transaction() {

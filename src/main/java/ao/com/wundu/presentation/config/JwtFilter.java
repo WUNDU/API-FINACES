@@ -35,7 +35,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 path.startsWith("/swagger-ui") ||
                 path.equals("/swagger-ui.html") ||
                 path.startsWith("/api/auth") ||
-                path.startsWith("/api/users")) {
+                path.startsWith("/api/users"))  {
             logger.debug("Ignorando validação JWT para endpoint do Swagger: {}", path);
             filterChain.doFilter(request, response);
             return;

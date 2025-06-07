@@ -1,4 +1,4 @@
 spring:
   profiles:
-    active: dev  # Define o perfil ativo (pode ser alterado)
+    active: prod  # Define o perfil ativo (pode ser alterado)
 

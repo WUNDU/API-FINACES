@@ -1,8 +1,8 @@
 spring:
   datasource:
-     url: jdbc:postgresql://caboose.proxy.rlwy.net:34168/railway
+     url: jdbc:postgresql://metro.proxy.rlwy.net:45137/railway
      username: postgres
-     password: ExXojZoKGuCcxIHbNJcEupWhMsdbgoKK
+     password: smPvHrbjnPGKBMiBttXIlfdGaVldkmVx
      driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -24,6 +24,15 @@ spring:
           starttls:
             enable: true
 
+  rabbitmq:
+    host: wundu-rabbitmq.railway.internal
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        prefetch: 1
+
 jwt:
   secret: ${JWT_SECRET:ThisIsAVeryLongAndSecureSecretKeyForJWTThatIsAtLeast64CharactersLong1234567890}
   expiration: 86400000  # 24 horas
@@ -44,10 +53,23 @@ sms:
 springdoc:
   api-docs:
     path: /api-docs
-    enabled: true
   swagger-ui:
     path: /swagger-ui.html
     enabled: true
+  packages-to-scan: ao.com.wundu
+  paths-to-match: /api/**
+
+wundu:
+  banking:
+    api:
+      url: https://wundu-banking-production.up.railway.app/api
+      key: 123456789SECRETKEY
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
 
 server:
   port: 8081  # Ou outra porta que você quiser

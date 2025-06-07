@@ -31,8 +31,7 @@ public class FindCategoryUseCase {
         return new CategoryResponseDTO(
                 category.getId(),
                 category.getName(),
-                category.getDescription(),
-                category.getTransaction() != null ? category.getTransaction().getId() : null
+                category.getDescription()
         );
     }
 }

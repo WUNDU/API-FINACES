@@ -12,6 +12,8 @@ public record AssociateCreditCardRequestDTO(
         @NotBlank(message = "ID do usuário é obrigatório")
         String userId,
 
+        String bankName,
+
         @NotBlank(message = "Número do cartão é obrigatório")
         @Pattern(regexp = "\\d{16}", message = "Número do cartão deve ter 16 dígitos")
         String cardNumber,

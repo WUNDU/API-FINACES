@@ -4,6 +4,7 @@ import ao.com.wundu.application.dtos.category.CategoryCreateDTO;
 import ao.com.wundu.application.dtos.category.CategoryResponseDTO;
 import ao.com.wundu.domain.entities.Category;
 import ao.com.wundu.domain.entities.Transaction;
+import ao.com.wundu.domain.exceptions.CategoryAlreadyExistsException;
 import ao.com.wundu.domain.exceptions.TransactionNotFoundException;
 import ao.com.wundu.infrastructure.repositories.CategoryRepository;
 import ao.com.wundu.infrastructure.repositories.TransactionRepository;
@@ -24,26 +25,18 @@ public class CreateCategoryUseCase {
         this.transactionRepository = transactionRepository;
     }
 
-    public CategoryResponseDTO execute(String transactionId, CategoryCreateDTO dto) {
-        logger.info("Criando categoria para transação: {}", transactionId);
+    public CategoryResponseDTO execute(CategoryCreateDTO dto) {
+        logger.info("Criando categoria: name={}", dto.name());
 
-        Transaction transaction = transactionRepository.findById(transactionId)
-                .orElseThrow(() -> {
-                    logger.error("Transação não encontrada: {}", transactionId);
-                    return new TransactionNotFoundException("Transação não encontrada");
-                });
-
-        Category category = new Category(dto.name(), dto.description(), transaction);
+        Category category = new Category(dto.name(), dto.description());
         category = categoryRepository.save(category);
-        transaction.setCategory(category);
-        transactionRepository.save(transaction);
 
-        logger.info("Categoria criada com sucesso: {}", category.getId());
+        logger.info("Categoria criada com sucesso: id={}", category.getId());
         return new CategoryResponseDTO(
                 category.getId(),
                 category.getName(),
-                category.getDescription(),
-                transaction.getId()
+                category.getDescription()
         );
+
     }
 }
