@@ -31,6 +31,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       WUNDU_RABBITMQ_HOST: rabbitmqbanking  # <-- muda isso!
+      SENTRY_DSN: https://73b8613be02c0114f9038c597c28c575@o4509474527838208.ingest.de.sentry.io/4509474651111504
     depends_on:
       postgres:
         condition: service_healthy

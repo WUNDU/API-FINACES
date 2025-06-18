@@ -25,13 +25,25 @@ spring:
             enable: true
 
   rabbitmq:
-    host: wundu-rabbitmq.railway.internal
+    host: wundu-rabbitmq.railway.internal  # Domínio interno do RabbitMQ
     port: 5672
-    username: guest
-    password: guest
+    username: wunduuser
+    password: wundupass123
+    connection-timeout: 30000
+    template:
+      retry:
+        enabled: true
+        initial-interval: 1000
+        max-attempts: 3
+        max-interval: 5000
     listener:
       simple:
         prefetch: 1
+        retry:
+          enabled: true
+          initial-interval: 1000
+          max-attempts: 3
+          max-interval: 5000
 
 jwt:
   secret: ${JWT_SECRET:ThisIsAVeryLongAndSecureSecretKeyForJWTThatIsAtLeast64CharactersLong1234567890}
@@ -73,3 +85,13 @@ logging:
 
 server:
   port: 8081  # Ou outra porta que você quiser
+
+sentry:
+  dsn: https://73b8613be02c0114f9038c597c28c575@o4509474527838208.ingest.de.sentry.io/4509474651111504
+  in-app-incluse: ao.com.wundu
+  send-default-pii: true
+  traces-sample-rate: 1.0
+  logging:
+    enabled: true
+    minimum-breadcrumb-level: INFO
+    minimum-event-level: ERROR

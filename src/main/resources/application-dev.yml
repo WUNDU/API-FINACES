@@ -76,3 +76,13 @@ logging:
     org:
       springframework:
         security: DEBUG
+
+sentry:
+  dsn: https://73b8613be02c0114f9038c597c28c575@o4509474527838208.ingest.de.sentry.io/4509474651111504
+  in-app-includes: ao.com.wundu # Corrigido
+  send-default-pii: true
+  traces-sample-rate: 1.0
+  logging:
+    enabled: true
+    minimum-breadcrumb-level: INFO
+    minimum-event-level: ERROR

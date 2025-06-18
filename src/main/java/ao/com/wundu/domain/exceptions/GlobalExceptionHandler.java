@@ -1,5 +1,6 @@
 package ao.com.wundu.domain.exceptions;
 
+import io.sentry.Sentry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handlerBusinessExceptionException(BusinessException ex) {
+
+        // ADICIONE ESTA LINHA - Enviar para Sentry
+        Sentry.captureException(ex);
+
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
                 ex.getStatus().value(),

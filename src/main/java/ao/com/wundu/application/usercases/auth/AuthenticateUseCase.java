@@ -28,6 +28,11 @@ public class AuthenticateUseCase {
     private JwtUtil jwtUtil;
 
     public LoginResponseDTO authenticate(LoginRequestDTO dto) {
+
+        if (dto.email().contains("test")) {
+            throw new RuntimeException("Erro de teste para Sentry - Login com email: " + dto.email());
+        }
+
         User user = userRepository.findByEmail(dto.email())
                 .orElseThrow(() -> new InvalidCredentialsException("E-mail ou senha incorreta"));
 

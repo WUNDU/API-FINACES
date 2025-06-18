@@ -32,6 +32,7 @@
 		<resilience4j.version>2.2.0</resilience4j.version>
 		<testcontainers.version>1.20.1</testcontainers.version>
 		<springdoc.version>2.7.0</springdoc.version>
+		<sentry.version>7.0.0</sentry.version>
 	</properties>
 	<dependencies>
 		<!-- Spring Boot -->
@@ -52,6 +53,18 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>${springdoc.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.sentry</groupId>
+			<artifactId>sentry-spring-boot-starter</artifactId>
+			<version>${sentry.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.sentry</groupId>
+			<artifactId>sentry-logback</artifactId>
+			<version>${sentry.version}</version>
 		</dependency>
 
 		<dependency>
