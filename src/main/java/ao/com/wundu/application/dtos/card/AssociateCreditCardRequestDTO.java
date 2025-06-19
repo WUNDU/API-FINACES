@@ -16,8 +16,8 @@ public record AssociateCreditCardRequestDTO(
         String cardNumber,
 
         @NotNull(message = "Data de expiração é obrigatória")
-        @Future(message = "Data de expiração deve ser futura")
-        LocalDate expirationDate,
+        @Pattern(regexp = "\\d{2}/\\d{2}", message = "Data de expiração deve estar no formato MM/yy")
+        String expirationDate,
 
 
         @NotBlank(message = "Nome no cartão é obrigatório")

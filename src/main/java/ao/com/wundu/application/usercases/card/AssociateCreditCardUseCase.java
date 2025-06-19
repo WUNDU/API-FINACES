@@ -8,6 +8,7 @@ import ao.com.wundu.domain.exceptions.*;
 import ao.com.wundu.infrastructure.repositories.CreditCardRepository;
 import ao.com.wundu.infrastructure.repositories.UserRepository;
 import ao.com.wundu.service.EncryptionService;
+import ao.com.wundu.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDate;
 
 @Service
 public class AssociateCreditCardUseCase {
@@ -76,11 +79,25 @@ public class AssociateCreditCardUseCase {
             throw new CreditCardLimitExceededException("Limite de " + maxCards + " cartões atingido");
         }
 
+        // Converter data MM/yy para LocalDate para enviar para Banking API
+        LocalDate expirationDate;
+        try {
+            expirationDate = DateUtils.convertMMyyToLocalDate(dto.expirationDate());
+
+            // Validar se a data está no futuro
+            if (!DateUtils.isExpirationDateValid(expirationDate)) {
+                throw new InvalidCardException("Data de expiração deve ser futura");
+            }
+        } catch (IllegalArgumentException e) {
+            logger.error("Erro na conversão da data de expiração: {}", e.getMessage());
+            throw new InvalidCardException("Formato de data de expiração inválido. Use MM/yy");
+        }
+
         // Chamar Wundu Banking API para validar cartão
         try {
             String url = bankingApiUrl + "/card/validate";
             CardValidateRequest bankingRequest = new CardValidateRequest(
-                    dto.cardNumber(), null, dto.expirationDate()
+                    dto.cardNumber(), null, expirationDate
                     );
 
             HttpEntity<CardValidateRequest> request = new HttpEntity<>(bankingRequest);
@@ -96,6 +113,8 @@ public class AssociateCreditCardUseCase {
             }
 
             Long externalCardId = response.getBody().cardId();
+            String bankName = response.getBody().bankName();
+
             // Verificar se o cartão já está associado
             if (creditCardRepository.existsByExternalCardId(externalCardId.toString())) {
                 logger.error("Cartão já associado: externalCardId={}", externalCardId);
@@ -107,15 +126,16 @@ public class AssociateCreditCardUseCase {
             card.setExternalCardId(externalCardId.toString());
             card.setUser(user);
             card.setCardNumber(encryptionService.encrypt(dto.cardNumber()));
-            card.setBankName(dto.cardHolderName());
-            card.setExpirationDate(dto.expirationDate());
+            card.setBankName(bankName); // Usar bankName da resposta da Banking API
+            card.setCardHolderName(dto.cardHolderName()); // Usar cardHolderName do request
+            card.setExpirationDate(expirationDate);
             card = creditCardRepository.save(card);
 
             logger.info("Cartão associado com sucesso: externalCardId={}", externalCardId);
             return new CreditCardResponseDTO(
                     card.getId(),
                     maskCardNumber(dto.cardNumber()),
-                    card.getBankName(),
+                    bankName,
                     card.getCardHolderName(),
                     card.getExpirationDate().toString(),
                     userId
