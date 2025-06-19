@@ -44,6 +44,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/**").permitAll()
                         .requestMatchers("/api/transactions/**").permitAll()
                         .requestMatchers("/api/categories/**").permitAll()
+                        .requestMatchers("/api/credit-cards/user/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/credit-cards/user/associate").permitAll()
                         .requestMatchers(HttpMethod.GET,  "/api/transactions/credit-card/**").permitAll()

@@ -19,6 +19,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AssociateCreditCardUseCase {
@@ -93,6 +95,8 @@ public class AssociateCreditCardUseCase {
             throw new InvalidCardException("Formato de data de expiração inválido. Use MM/yy");
         }
 
+
+
         // Chamar Wundu Banking API para validar cartão
         try {
             String url = bankingApiUrl + "/card/validate";
@@ -137,7 +141,8 @@ public class AssociateCreditCardUseCase {
                     maskCardNumber(dto.cardNumber()),
                     bankName,
                     card.getCardHolderName(),
-                    card.getExpirationDate().toString(),
+                    DateUtils.convertLocalDateToMMyy(card.getExpirationDate()),
+                    //card.getExpirationDate().toString(),
                     userId
             );
         } catch (HttpClientErrorException e) {
@@ -153,6 +158,7 @@ public class AssociateCreditCardUseCase {
             throw new RuntimeException("Erro ao integrar cartão", e);
         }
     }
+
 
     private String maskCardNumber(String cardNumber) {
         if (cardNumber == null || cardNumber.length() < 16) {
