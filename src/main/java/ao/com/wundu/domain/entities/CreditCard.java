@@ -27,6 +27,9 @@ public class CreditCard {
     @Column(name = "bank_name", nullable = false)
     private String bankName;
 
+    @Column(name = "card_holder_name", nullable = false)
+    private String cardHolderName;
+
     @Column(name = "expiration_date", nullable = false)
     private LocalDate expirationDate;
 
@@ -37,9 +40,10 @@ public class CreditCard {
     public CreditCard() {
     }
 
-    public CreditCard(String cardNumber, String bankName, LocalDate expirationDate, User user) {
+    public CreditCard(String cardNumber, String bankName, String cardHolderName, LocalDate expirationDate, User user) {
         this.cardNumber = cardNumber;
         this.bankName = bankName;
+        this.cardHolderName = cardHolderName;
         this.expirationDate = expirationDate;
         this.user = user;
     }
@@ -82,6 +86,14 @@ public class CreditCard {
 
     public void setBankName(String bankName) {
         this.bankName = bankName;
+    }
+
+    public String getCardHolderName() {
+        return cardHolderName;
+    }
+
+    public void setCardHolderName(String cardHolderName) {
+        this.cardHolderName = cardHolderName;
     }
 
     public LocalDate getExpirationDate() {

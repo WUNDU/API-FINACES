@@ -41,6 +41,7 @@ public class CreditCardMapper {
                     src.getId(),
                     src.getMaskedCardNumber() != null ? src.getMaskedCardNumber() : "**** **** **** ****",
                     src.getBankName(),
+                    src.getCardHolderName(),
                     src.getExpirationDate() != null ? src.getFormattedExpirationDate() : null,
                     src.getUser() != null ? src.getUser().getId() : null
             );

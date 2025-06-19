@@ -80,8 +80,8 @@ public class AssociateCreditCardUseCase {
         try {
             String url = bankingApiUrl + "/card/validate";
             CardValidateRequest bankingRequest = new CardValidateRequest(
-                    dto.cardNumber(), dto.bankName(), dto.expirationDate()
-            );
+                    dto.cardNumber(), null, dto.expirationDate()
+                    );
 
             HttpEntity<CardValidateRequest> request = new HttpEntity<>(bankingRequest);
             logger.debug("Enviando requisição para Wundu Banking API: {}", url);
@@ -107,7 +107,7 @@ public class AssociateCreditCardUseCase {
             card.setExternalCardId(externalCardId.toString());
             card.setUser(user);
             card.setCardNumber(encryptionService.encrypt(dto.cardNumber()));
-            card.setBankName(dto.bankName());
+            card.setBankName(dto.cardHolderName());
             card.setExpirationDate(dto.expirationDate());
             card = creditCardRepository.save(card);
 
@@ -116,6 +116,7 @@ public class AssociateCreditCardUseCase {
                     card.getId(),
                     maskCardNumber(dto.cardNumber()),
                     card.getBankName(),
+                    card.getCardHolderName(),
                     card.getExpirationDate().toString(),
                     userId
             );
